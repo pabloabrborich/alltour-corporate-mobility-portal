@@ -10,8 +10,9 @@ type ConfirmationRequest = ServiceRequest & {
   service_tickets: ServiceTicket[];
 };
 
-export default async function ConfirmationPage({ params }: { params: { id: string } }) {
-  const request = await getConfirmation(params.id);
+export default async function ConfirmationPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const request = await getConfirmation(id);
   const ticket = request?.service_tickets?.[0];
 
   return (

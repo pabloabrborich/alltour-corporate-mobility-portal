@@ -15,11 +15,12 @@ export const dynamic = "force-dynamic";
 export default async function AdminPage({
   searchParams
 }: {
-  searchParams: { status?: string; date?: string };
+  searchParams: Promise<{ status?: string; date?: string }>;
 }) {
   await requireAdmin();
+  const filters = await searchParams;
 
-  const requests = await getRequests(searchParams.status, searchParams.date);
+  const requests = await getRequests(filters.status, filters.date);
   const now = new Date();
   const today = now.toISOString().slice(0, 10);
   const month = now.toISOString().slice(0, 7);
@@ -52,7 +53,7 @@ export default async function AdminPage({
               <form className="grid gap-3 sm:grid-cols-[180px_180px_auto]">
                 <label>
                   <span className="label">Estado</span>
-                  <select className="field" name="status" defaultValue={searchParams.status || ""}>
+                  <select className="field" name="status" defaultValue={filters.status || ""}>
                     <option value="">Todos</option>
                     {statuses.map((status) => (
                       <option key={status} value={status}>
@@ -63,7 +64,7 @@ export default async function AdminPage({
                 </label>
                 <label>
                   <span className="label">Fecha</span>
-                  <input className="field" name="date" type="date" defaultValue={searchParams.date || ""} />
+                  <input className="field" name="date" type="date" defaultValue={filters.date || ""} />
                 </label>
                 <button className="btn-dark self-end" type="submit">
                   Filtrar

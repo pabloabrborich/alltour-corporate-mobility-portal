@@ -3,11 +3,13 @@ import { CheckCircle2 } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { SiteHeader } from "@/components/site-header";
 
-export default function RequestSuccessPage({
+export default async function RequestSuccessPage({
   searchParams
 }: {
-  searchParams: { id?: string; demo?: string };
+  searchParams: Promise<{ id?: string; demo?: string }>;
 }) {
+  const params = await searchParams;
+
   return (
     <main>
       <SiteHeader />
@@ -19,8 +21,8 @@ export default function RequestSuccessPage({
             <p className="mt-4 text-steel">
               ALLTOUR revisara disponibilidad y confirmara la operacion antes de asignar vehiculo y conductor.
             </p>
-            {searchParams.id ? <p className="mt-4 text-sm text-steel">Referencia: {searchParams.id}</p> : null}
-            {searchParams.demo ? (
+            {params.id ? <p className="mt-4 text-sm text-steel">Referencia: {params.id}</p> : null}
+            {params.demo ? (
               <p className="mt-4 rounded-md bg-amber-50 p-3 text-sm text-amber-800">
                 Modo demo: configure Supabase para guardar solicitudes reales.
               </p>

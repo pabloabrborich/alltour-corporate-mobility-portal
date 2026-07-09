@@ -16,9 +16,10 @@ type FullRequest = ServiceRequest & {
   service_tickets: ServiceTicket[];
 };
 
-export default async function ServiceDetailPage({ params }: { params: { id: string } }) {
+export default async function ServiceDetailPage({ params }: { params: Promise<{ id: string }> }) {
   await requireAdmin();
-  const request = await getRequest(params.id);
+  const { id } = await params;
+  const request = await getRequest(id);
 
   if (!request) {
     return (
