@@ -1,5 +1,6 @@
 import { CarFront, CheckCircle2, Phone } from "lucide-react";
 import { Footer } from "@/components/footer";
+import { RouteStopsTimeline } from "@/components/route-stops-timeline";
 import { SiteHeader } from "@/components/site-header";
 import { StatusPill } from "@/components/status-pill";
 import { formatDateTime } from "@/lib/format";
@@ -42,6 +43,9 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ i
                 <Detail label="Vehiculo" value={request.vehicle_type || "Por confirmar"} />
                 <Detail label="Placa" value={ticket?.vehicle_plate || "Por confirmar"} />
                 <Detail label="Soporte" value={process.env.NEXT_PUBLIC_SUPPORT_PHONE || "+593 99 000 0000"} />
+              </div>
+              <div className="mt-6">
+                <RouteStopsTimeline stops={request.route_stops} />
               </div>
               <div className="mt-6 rounded-md border border-line bg-slate-50 p-4">
                 <p className="text-sm font-bold text-steel">Notas</p>

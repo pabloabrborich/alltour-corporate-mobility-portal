@@ -24,9 +24,21 @@ export type ServiceRequest = {
   status: string;
   estimated_price: number | null;
   internal_notes: string | null;
+  route_stops: RouteStop[] | null;
   created_at: string;
   companies?: Company | null;
   service_tickets?: ServiceTicket[] | null;
+};
+
+export type RouteStop = {
+  id?: string;
+  type: "pickup" | "stop" | "dropoff";
+  place: string;
+  reference?: string;
+  maps_url?: string;
+  passengers?: string;
+  time?: string;
+  notes?: string;
 };
 
 export type Vehicle = {

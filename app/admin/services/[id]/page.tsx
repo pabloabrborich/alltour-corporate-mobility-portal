@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Mail, MessageCircle } from "lucide-react";
 import { updateTicket } from "@/app/actions";
 import { CopyButton } from "@/components/copy-tools";
+import { formatRouteStops, RouteStopsTimeline } from "@/components/route-stops-timeline";
 import { StatusPill } from "@/components/status-pill";
 import { requireAdmin } from "@/lib/auth";
 import { currency, formatDateTime } from "@/lib/format";
@@ -66,6 +67,8 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
               <Detail label="Precio estimado" value={currency(request.estimated_price)} />
             </div>
           </div>
+
+          <RouteStopsTimeline stops={request.route_stops} />
 
           <div className="panel p-6">
             <h2 className="text-xl font-bold">Detalle de pasajeros y requisitos</h2>
@@ -206,10 +209,13 @@ async function getRequest(id: string): Promise<FullRequest | null> {
 }
 
 function buildPassengerConfirmation(request: FullRequest, ticket?: ServiceTicket) {
+  const routeStops = formatRouteStops(request.route_stops);
+
   return `Confirmacion ALLTOUR
 Hora de recogida: ${formatDateTime(request.pickup_datetime)}
 Lugar: ${request.pickup_location}
 Destino: ${request.dropoff_location}
+${routeStops ? `Itinerario:\n${routeStops}\n` : ""}
 Conductor: ${ticket?.assigned_driver || "Por confirmar"}
 Telefono: ${ticket?.driver_phone || "Por confirmar"}
 Vehiculo: ${request.vehicle_type || "Por confirmar"}
@@ -218,6 +224,8 @@ Soporte: ${process.env.NEXT_PUBLIC_SUPPORT_PHONE || "+593 99 000 0000"}`;
 }
 
 function buildCorporateEmail(request: FullRequest, ticket?: ServiceTicket) {
+  const routeStops = formatRouteStops(request.route_stops);
+
   return `Estimado equipo,
 
 Confirmamos la recepcion y programacion del servicio:
@@ -225,6 +233,7 @@ Confirmamos la recepcion y programacion del servicio:
 Empresa: ${request.companies?.name || "Empresa"}
 Fecha/hora: ${formatDateTime(request.pickup_datetime)}
 Ruta: ${request.pickup_location} -> ${request.dropoff_location}
+${routeStops ? `\nItinerario:\n${routeStops}` : ""}
 Pasajeros: ${request.passengers_count}
 Vehiculo: ${request.vehicle_type || "Por confirmar"}
 Conductor: ${ticket?.assigned_driver || "Por confirmar"}

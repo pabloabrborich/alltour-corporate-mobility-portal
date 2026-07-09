@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
 import { setAdminCookie } from "@/lib/auth";
+import type { RouteStop } from "@/lib/types";
 
 function required(formData: FormData, key: string) {
   const value = String(formData.get(key) || "").trim();
@@ -15,6 +16,32 @@ function required(formData: FormData, key: string) {
 
 function optional(formData: FormData, key: string) {
   return String(formData.get(key) || "").trim() || null;
+}
+
+function parseRouteStops(formData: FormData): RouteStop[] | null {
+  const raw = optional(formData, "route_stops");
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+
+    const stops = parsed
+      .map((stop) => ({
+        type: stop.type === "pickup" || stop.type === "dropoff" || stop.type === "stop" ? stop.type : "stop",
+        place: String(stop.place || "").trim(),
+        reference: String(stop.reference || "").trim(),
+        maps_url: String(stop.maps_url || "").trim(),
+        passengers: String(stop.passengers || "").trim(),
+        time: String(stop.time || "").trim(),
+        notes: String(stop.notes || "").trim()
+      }))
+      .filter((stop) => stop.place || stop.reference || stop.maps_url || stop.passengers || stop.time || stop.notes);
+
+    return stops.length ? stops : null;
+  } catch {
+    return null;
+  }
 }
 
 export async function createServiceRequest(formData: FormData) {
@@ -59,22 +86,26 @@ export async function createServiceRequest(formData: FormData) {
     throw new Error("No se pudo crear la empresa.");
   }
 
+  const routeStops = parseRouteStops(formData);
+  const requestPayload = {
+    company_id: company.id,
+    service_type: required(formData, "service_type"),
+    pickup_location: required(formData, "pickup_location"),
+    dropoff_location: required(formData, "dropoff_location"),
+    pickup_datetime: required(formData, "pickup_datetime"),
+    passengers_count: Number(required(formData, "passengers_count")),
+    passenger_names: optional(formData, "passenger_names"),
+    vehicle_type: optional(formData, "vehicle_type"),
+    flight_info: optional(formData, "flight_info"),
+    special_requirements: optional(formData, "special_requirements"),
+    ...(routeStops ? { route_stops: routeStops } : {}),
+    status: "Nueva solicitud",
+    internal_notes: optional(formData, "notes")
+  };
+
   const { data: request, error: requestError } = await supabase
     .from("service_requests")
-    .insert({
-      company_id: company.id,
-      service_type: required(formData, "service_type"),
-      pickup_location: required(formData, "pickup_location"),
-      dropoff_location: required(formData, "dropoff_location"),
-      pickup_datetime: required(formData, "pickup_datetime"),
-      passengers_count: Number(required(formData, "passengers_count")),
-      passenger_names: optional(formData, "passenger_names"),
-      vehicle_type: optional(formData, "vehicle_type"),
-      flight_info: optional(formData, "flight_info"),
-      special_requirements: optional(formData, "special_requirements"),
-      status: "Nueva solicitud",
-      internal_notes: optional(formData, "notes")
-    })
+    .insert(requestPayload)
     .select()
     .single();
 

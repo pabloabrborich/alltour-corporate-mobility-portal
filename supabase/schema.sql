@@ -23,6 +23,7 @@ create table if not exists service_requests (
   vehicle_type text,
   flight_info text,
   special_requirements text,
+  route_stops jsonb,
   status text not null default 'Nueva solicitud',
   estimated_price numeric,
   internal_notes text,

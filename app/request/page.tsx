@@ -1,6 +1,7 @@
 import { PlaneTakeoff, Send } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { SelectField, TextArea, TextField } from "@/components/forms";
+import { RouteStopsBuilder } from "@/components/route-stops-builder";
 import { SiteHeader } from "@/components/site-header";
 import { createServiceRequest } from "@/app/actions";
 
@@ -59,12 +60,14 @@ export default function RequestPage() {
 
             <FormSection title="Servicio">
               <SelectField name="service_type" label="Tipo de servicio" options={serviceTypes} required />
-              <TextField name="pickup_location" label="Lugar de recogida" required />
-              <TextField name="dropoff_location" label="Destino" required />
+              <TextField name="pickup_location" label="Pickup principal / resumen" required />
+              <TextField name="dropoff_location" label="Dropoff principal / resumen" required />
               <TextField name="pickup_datetime" label="Fecha y hora de recogida" type="datetime-local" required />
               <TextField name="passengers_count" label="Numero de pasajeros" type="number" min="1" required />
               <SelectField name="vehicle_type" label="Vehiculo solicitado" options={vehicleTypes} />
             </FormSection>
+
+            <RouteStopsBuilder />
 
             <FormSection title="Pasajeros y operacion">
               <TextArea name="passenger_names" label="Nombres de pasajeros" placeholder="Un pasajero por linea" />

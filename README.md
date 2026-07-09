@@ -42,6 +42,12 @@ supabase/schema.sql
 supabase/seed.sql
 ```
 
+Si el proyecto ya existia antes de agregar itinerarios con multiples paradas, ejecute tambien:
+
+```text
+supabase/add-route-stops.sql
+```
+
 5. Inicie desarrollo:
 
 ```bash
@@ -56,6 +62,10 @@ npm run dev
 - `/admin` agenda interna protegida por `ADMIN_PASSWORD`
 - `/admin/services/[id]` detalle y edicion del ticket operativo
 - `/confirmation/[id]` confirmacion publica para pasajero
+
+## Itinerarios y multiples paradas
+
+El formulario permite agregar puntos ilimitados de recorrido: pickup, parada y dropoff. Cada punto puede incluir lugar, referencia exacta, link de Google Maps, pasajeros asociados, hora/ventana y notas. Estos datos se guardan en `service_requests.route_stops` como JSON.
 
 ## Notas de produccion
 
