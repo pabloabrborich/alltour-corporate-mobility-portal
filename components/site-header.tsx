@@ -7,8 +7,8 @@ export function SiteHeader() {
     <header className="border-b border-white/10 bg-navy text-white">
       <div className="container-page flex min-h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center">
-            <Image src="/alltour-mark.png" alt="ALLTOUR" width={36} height={36} className="h-9 w-9 object-contain" />
+          <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-md border border-white/20 bg-white">
+            <Image src="/alltour-logo.png" alt="ALLTOUR" width={36} height={36} className="h-full w-full object-cover" />
           </span>
           <span>
             <span className="block text-sm font-bold tracking-wide">ALLTOUR</span>
