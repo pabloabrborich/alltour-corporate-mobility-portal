@@ -1,13 +1,14 @@
 import Link from "next/link";
-import { ArrowRight, ShieldCheck } from "lucide-react";
+import Image from "next/image";
+import { ArrowRight } from "lucide-react";
 
 export function SiteHeader() {
   return (
     <header className="border-b border-white/10 bg-navy text-white">
       <div className="container-page flex min-h-16 items-center justify-between gap-4">
         <Link href="/" className="flex items-center gap-3">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md border border-white/20 bg-white/10">
-            <ShieldCheck size={20} />
+          <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-md border border-white/20 bg-white/10">
+            <Image src="/alltour-mark.png" alt="ALLTOUR" width={36} height={36} className="h-full w-full object-cover" />
           </span>
           <span>
             <span className="block text-sm font-bold tracking-wide">ALLTOUR</span>
