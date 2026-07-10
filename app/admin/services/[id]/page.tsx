@@ -10,6 +10,7 @@ import { getCompanyPortalPath } from "@/lib/company-portal";
 import { currency, formatDateTime } from "@/lib/format";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
 import type { ServiceRequest, ServiceTicket } from "@/lib/types";
+import { createWhatsappUrl } from "@/lib/whatsapp";
 
 const statuses = ["Nueva solicitud", "Confirmado", "Vehiculo asignado", "En operacion", "Completado", "Cancelado"];
 const invoiceStatuses = ["Pendiente", "Incluido en factura mensual", "Facturado", "Pagado", "No facturable"];
@@ -39,7 +40,10 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
   const ticket = request.service_tickets?.[0];
   const passengerText = buildPassengerConfirmation(request, ticket);
+  const driverText = buildDriverDispatch(request, ticket);
   const emailText = buildCorporateEmail(request, ticket);
+  const passengerWhatsappUrl = createWhatsappUrl(request.companies?.phone, passengerText);
+  const driverWhatsappUrl = createWhatsappUrl(ticket?.driver_phone, driverText);
   const portalPath = getCompanyPortalPath(request.companies);
 
   return (
@@ -91,7 +95,12 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
                   <MessageCircle size={18} /> WhatsApp pasajero
                 </div>
                 <p className="whitespace-pre-line text-sm text-steel">{passengerText}</p>
-                <div className="mt-4">
+                <div className="mt-4 flex flex-wrap gap-3">
+                  {passengerWhatsappUrl ? (
+                    <a className="btn-primary" href={passengerWhatsappUrl} target="_blank" rel="noreferrer">
+                      <MessageCircle size={16} /> Abrir WhatsApp
+                    </a>
+                  ) : null}
                   <CopyButton text={passengerText} label="Copiar WhatsApp" />
                 </div>
               </div>
@@ -110,6 +119,26 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
 
         <div className="space-y-6">
           <PortalLinkCard path={portalPath} />
+
+          <div className="panel p-6">
+            <h2 className="text-xl font-bold">Acciones WhatsApp</h2>
+            <div className="mt-5 space-y-3">
+              {passengerWhatsappUrl ? (
+                <a className="btn-primary w-full" href={passengerWhatsappUrl} target="_blank" rel="noreferrer">
+                  <MessageCircle size={16} /> WhatsApp cliente
+                </a>
+              ) : (
+                <p className="rounded-md border border-line bg-slate-50 p-3 text-sm text-steel">Telefono de cliente no disponible.</p>
+              )}
+              {driverWhatsappUrl ? (
+                <a className="btn-secondary w-full" href={driverWhatsappUrl} target="_blank" rel="noreferrer">
+                  <MessageCircle size={16} /> WhatsApp conductor
+                </a>
+              ) : (
+                <p className="rounded-md border border-line bg-slate-50 p-3 text-sm text-steel">Telefono de conductor pendiente.</p>
+              )}
+            </div>
+          </div>
 
           <form action={updateTicket} className="panel h-fit p-6">
             <h2 className="text-xl font-bold">Actualizar operacion</h2>
@@ -228,6 +257,21 @@ Telefono: ${ticket?.driver_phone || "Por confirmar"}
 Vehiculo: ${request.vehicle_type || "Por confirmar"}
 Placa: ${ticket?.vehicle_plate || "Por confirmar"}
 Soporte: ${process.env.NEXT_PUBLIC_SUPPORT_PHONE || "+593 99 000 0000"}`;
+}
+
+function buildDriverDispatch(request: FullRequest, ticket?: ServiceTicket) {
+  const routeStops = formatRouteStops(request.route_stops);
+
+  return `Servicio ALLTOUR asignado
+Empresa: ${request.companies?.name || "Empresa"}
+Fecha/hora: ${formatDateTime(request.pickup_datetime)}
+Recogida: ${request.pickup_location}
+Destino: ${request.dropoff_location}
+${routeStops ? `Itinerario:\n${routeStops}\n` : ""}
+Pasajeros: ${request.passengers_count}
+Vehiculo: ${request.vehicle_type || "Por confirmar"}
+Placa: ${ticket?.vehicle_plate || "Por confirmar"}
+Estado operativo: ${ticket?.operation_status || "Por asignar"}`;
 }
 
 function buildCorporateEmail(request: FullRequest, ticket?: ServiceTicket) {

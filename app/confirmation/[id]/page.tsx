@@ -1,4 +1,4 @@
-import { CarFront, CheckCircle2, Phone } from "lucide-react";
+import { CarFront, CheckCircle2, MessageCircle, Phone } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { RouteStopsTimeline } from "@/components/route-stops-timeline";
 import { SiteHeader } from "@/components/site-header";
@@ -6,6 +6,7 @@ import { StatusPill } from "@/components/status-pill";
 import { formatDateTime } from "@/lib/format";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
 import type { ServiceRequest, ServiceTicket } from "@/lib/types";
+import { createWhatsappUrl } from "@/lib/whatsapp";
 
 type ConfirmationRequest = ServiceRequest & {
   service_tickets: ServiceTicket[];
@@ -15,6 +16,10 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ i
   const { id } = await params;
   const request = await getConfirmation(id);
   const ticket = request?.service_tickets?.[0];
+  const driverWhatsappUrl = request ? createWhatsappUrl(ticket?.driver_phone, buildPassengerSupportMessage(request, ticket)) : null;
+  const supportWhatsappUrl = request
+    ? createWhatsappUrl(process.env.NEXT_PUBLIC_SUPPORT_PHONE, buildPassengerSupportMessage(request, ticket))
+    : null;
 
   return (
     <main>
@@ -52,9 +57,21 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ i
                 <p className="mt-2 text-sm">{request.special_requirements || "Presentarse en el punto de encuentro acordado."}</p>
               </div>
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-                <a className="btn-primary" href={`tel:${ticket?.driver_phone || ""}`}>
-                  <Phone size={16} /> Llamar conductor
-                </a>
+                {ticket?.driver_phone ? (
+                  <a className="btn-primary" href={`tel:${ticket.driver_phone}`}>
+                    <Phone size={16} /> Llamar conductor
+                  </a>
+                ) : null}
+                {driverWhatsappUrl ? (
+                  <a className="btn-secondary" href={driverWhatsappUrl} target="_blank" rel="noreferrer">
+                    <MessageCircle size={16} /> WhatsApp conductor
+                  </a>
+                ) : null}
+                {supportWhatsappUrl ? (
+                  <a className="btn-secondary" href={supportWhatsappUrl} target="_blank" rel="noreferrer">
+                    <MessageCircle size={16} /> WhatsApp soporte
+                  </a>
+                ) : null}
                 <div className="btn-secondary">
                   <CarFront size={16} /> Servicio monitoreado
                 </div>
@@ -98,4 +115,13 @@ async function getConfirmation(id: string): Promise<ConfirmationRequest | null> 
   }
 
   return data as ConfirmationRequest;
+}
+
+function buildPassengerSupportMessage(request: ConfirmationRequest, ticket?: ServiceTicket) {
+  return `Hola ALLTOUR, consulto sobre mi servicio:
+Fecha/hora: ${formatDateTime(request.pickup_datetime)}
+Ruta: ${request.pickup_location} -> ${request.dropoff_location}
+Conductor: ${ticket?.assigned_driver || "Por confirmar"}
+Placa: ${ticket?.vehicle_plate || "Por confirmar"}
+Estado: ${request.status}`;
 }
