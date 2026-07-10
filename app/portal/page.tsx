@@ -13,10 +13,10 @@ export default function PortalPage() {
       <section className="bg-navy py-10 text-white">
         <div className="container-page flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-gold">Portal corporativo</p>
-            <h1 className="mt-2 text-4xl font-bold">Andes Pharma Mobility Desk</h1>
+            <p className="text-sm font-semibold text-gold">Vista operativa corporativa</p>
+            <h1 className="mt-2 text-4xl font-bold">Corporate Mobility Desk</h1>
             <p className="mt-3 max-w-2xl text-slate-200">
-              Vista de control para confirmar servicios, revisar historicos, rutas frecuentes y estado de facturacion.
+              Referencia visual de como ALLTOUR estructura servicios, itinerarios, pasajeros, confirmaciones y cierres operativos.
             </p>
           </div>
           <Link href="/request" className="btn-primary">
@@ -47,7 +47,7 @@ export default function PortalPage() {
                     <th className="px-5 py-3">Ruta</th>
                     <th className="px-5 py-3">Pasajeros</th>
                     <th className="px-5 py-3">Estado</th>
-                    <th className="px-5 py-3">Factura</th>
+                    <th className="px-5 py-3">Cierre</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-line">
@@ -60,7 +60,7 @@ export default function PortalPage() {
                       <td className="px-5 py-4">
                         <StatusPill status={service.status} />
                       </td>
-                      <td className="px-5 py-4">{service.invoice}</td>
+                      <td className="px-5 py-4">{service.closeout}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -71,12 +71,12 @@ export default function PortalPage() {
           <div className="panel p-5">
             <div className="flex items-center gap-3">
               <FileText className="text-ocean" />
-              <h2 className="text-xl font-bold">Facturacion</h2>
+              <h2 className="text-xl font-bold">Cierre operativo</h2>
             </div>
             <div className="mt-5 space-y-4 text-sm">
-              <Line label="Pendiente de validar" value="$1,280.00" />
-              <Line label="En factura mensual" value="$4,940.00" />
-              <Line label="Pagado este mes" value="$7,320.00" />
+              <Line label="Servicios por validar" value="2" />
+              <Line label="Reporte mensual" value="En preparacion" />
+              <Line label="Soporte operativo" value="Activo" />
             </div>
           </div>
         </div>

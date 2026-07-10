@@ -1,30 +1,30 @@
 export const demoServices = [
   {
     id: "SV-1048",
-    company: "Andes Pharma",
+    company: "Cliente corporativo",
     date: "2026-07-13 07:40",
     route: "UIO Aeropuerto Mariscal Sucre -> Swissotel Quito",
     passengers: 4,
     status: "Confirmado",
-    invoice: "Pendiente"
+    closeout: "Por validar"
   },
   {
     id: "SV-1051",
-    company: "Delegacion Medica LATAM",
+    company: "Delegacion corporativa",
     date: "2026-07-14 18:20",
-    route: "JW Marriott Quito -> Centro de Convenciones",
+    route: "Hotel corporativo -> Centro de Convenciones",
     passengers: 18,
     status: "Vehiculo asignado",
-    invoice: "Incluido en factura mensual"
+    closeout: "En operacion"
   },
   {
     id: "SV-1057",
-    company: "Embajada Regional",
+    company: "Cliente institucional",
     date: "2026-07-16 05:30",
-    route: "Hotel Hilton Colon -> UIO Aeropuerto",
+    route: "Hotel ejecutivo -> UIO Aeropuerto",
     passengers: 7,
     status: "Pendiente de manifiesto",
-    invoice: "Pendiente"
+    closeout: "Pendiente"
   }
 ];
 
