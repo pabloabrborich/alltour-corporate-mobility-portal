@@ -48,6 +48,12 @@ Si el proyecto ya existia antes de agregar itinerarios con multiples paradas, ej
 supabase/add-route-stops.sql
 ```
 
+Para activar portales privados por empresa en un proyecto existente, ejecute:
+
+```text
+supabase/add-company-portal.sql
+```
+
 5. Inicie desarrollo:
 
 ```bash
@@ -59,6 +65,7 @@ npm run dev
 - `/` landing corporativa
 - `/request` formulario de solicitud
 - `/portal` portal corporativo
+- `/portal/company/[token]` portal privado por empresa
 - `/portal/demo` redireccion heredada hacia `/portal`
 - `/admin` agenda interna protegida por `ADMIN_PASSWORD`
 - `/admin/services/[id]` detalle y edicion del ticket operativo

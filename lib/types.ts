@@ -6,6 +6,8 @@ export type Company = {
   phone: string | null;
   industry: string | null;
   notes: string | null;
+  portal_access_token: string | null;
+  portal_enabled: boolean | null;
   created_at: string;
 };
 

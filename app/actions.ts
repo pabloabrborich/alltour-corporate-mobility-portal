@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
 import { setAdminCookie } from "@/lib/auth";
+import { createPortalToken } from "@/lib/company-portal";
 import type { RouteStop } from "@/lib/types";
 
 function required(formData: FormData, key: string) {
@@ -76,7 +77,9 @@ export async function createServiceRequest(formData: FormData) {
           contact_name: contactName,
           email,
           phone,
-          industry
+          industry,
+          portal_access_token: createPortalToken(),
+          portal_enabled: true
         })
         .select()
         .single()
@@ -84,6 +87,25 @@ export async function createServiceRequest(formData: FormData) {
 
   if (!company) {
     throw new Error("No se pudo crear la empresa.");
+  }
+
+  if (existingCompany && !existingCompany.portal_access_token) {
+    const { data: updatedCompany, error: tokenError } = await supabase
+      .from("companies")
+      .update({
+        portal_access_token: createPortalToken(),
+        portal_enabled: true
+      })
+      .eq("id", existingCompany.id)
+      .select()
+      .single();
+
+    if (tokenError || !updatedCompany) {
+      throw new Error(tokenError?.message || "No se pudo activar el portal de la empresa.");
+    }
+
+    company.portal_access_token = updatedCompany.portal_access_token;
+    company.portal_enabled = updatedCompany.portal_enabled;
   }
 
   const routeStops = parseRouteStops(formData);

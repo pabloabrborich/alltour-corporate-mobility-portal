@@ -8,6 +8,8 @@ create table if not exists companies (
   phone text,
   industry text,
   notes text,
+  portal_access_token text unique,
+  portal_enabled boolean default true,
   created_at timestamp with time zone default now()
 );
 

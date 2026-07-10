@@ -2,9 +2,11 @@ import Link from "next/link";
 import { Mail, MessageCircle } from "lucide-react";
 import { updateTicket } from "@/app/actions";
 import { CopyButton } from "@/components/copy-tools";
+import { PortalLinkCard } from "@/components/portal-link-card";
 import { formatRouteStops, RouteStopsTimeline } from "@/components/route-stops-timeline";
 import { StatusPill } from "@/components/status-pill";
 import { requireAdmin } from "@/lib/auth";
+import { getCompanyPortalPath } from "@/lib/company-portal";
 import { currency, formatDateTime } from "@/lib/format";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
 import type { ServiceRequest, ServiceTicket } from "@/lib/types";
@@ -38,6 +40,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
   const ticket = request.service_tickets?.[0];
   const passengerText = buildPassengerConfirmation(request, ticket);
   const emailText = buildCorporateEmail(request, ticket);
+  const portalPath = getCompanyPortalPath(request.companies);
 
   return (
     <main className="min-h-screen bg-mist">
@@ -105,38 +108,42 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <form action={updateTicket} className="panel h-fit p-6">
-          <h2 className="text-xl font-bold">Actualizar operacion</h2>
-          <input type="hidden" name="request_id" value={request.id} />
-          <input type="hidden" name="ticket_id" value={ticket?.id || ""} />
-          <div className="mt-5 space-y-4">
-            <Select name="status" label="Estado" options={statuses} defaultValue={request.status} />
-            <Select
-              name="operation_status"
-              label="Estado operativo"
-              options={operationStatuses}
-              defaultValue={ticket?.operation_status || "Por asignar"}
-            />
-            <Select
-              name="invoice_status"
-              label="Estado de factura"
-              options={invoiceStatuses}
-              defaultValue={ticket?.invoice_status || "Pendiente"}
-            />
-            <Input name="estimated_price" label="Precio estimado" type="number" step="0.01" defaultValue={request.estimated_price || ""} />
-            <Input name="vehicle_type" label="Tipo de vehiculo" defaultValue={request.vehicle_type || ""} />
-            <Input name="assigned_driver" label="Conductor asignado" defaultValue={ticket?.assigned_driver || ""} />
-            <Input name="driver_phone" label="Telefono conductor" defaultValue={ticket?.driver_phone || ""} />
-            <Input name="vehicle_plate" label="Placa" defaultValue={ticket?.vehicle_plate || ""} />
-            <label className="block">
-              <span className="label">Notas internas</span>
-              <textarea className="field min-h-28" name="internal_notes" defaultValue={request.internal_notes || ""} />
-            </label>
-          </div>
-          <button className="btn-primary mt-6 w-full" type="submit">
-            Guardar cambios
-          </button>
-        </form>
+        <div className="space-y-6">
+          <PortalLinkCard path={portalPath} />
+
+          <form action={updateTicket} className="panel h-fit p-6">
+            <h2 className="text-xl font-bold">Actualizar operacion</h2>
+            <input type="hidden" name="request_id" value={request.id} />
+            <input type="hidden" name="ticket_id" value={ticket?.id || ""} />
+            <div className="mt-5 space-y-4">
+              <Select name="status" label="Estado" options={statuses} defaultValue={request.status} />
+              <Select
+                name="operation_status"
+                label="Estado operativo"
+                options={operationStatuses}
+                defaultValue={ticket?.operation_status || "Por asignar"}
+              />
+              <Select
+                name="invoice_status"
+                label="Estado de factura"
+                options={invoiceStatuses}
+                defaultValue={ticket?.invoice_status || "Pendiente"}
+              />
+              <Input name="estimated_price" label="Precio estimado" type="number" step="0.01" defaultValue={request.estimated_price || ""} />
+              <Input name="vehicle_type" label="Tipo de vehiculo" defaultValue={request.vehicle_type || ""} />
+              <Input name="assigned_driver" label="Conductor asignado" defaultValue={ticket?.assigned_driver || ""} />
+              <Input name="driver_phone" label="Telefono conductor" defaultValue={ticket?.driver_phone || ""} />
+              <Input name="vehicle_plate" label="Placa" defaultValue={ticket?.vehicle_plate || ""} />
+              <label className="block">
+                <span className="label">Notas internas</span>
+                <textarea className="field min-h-28" name="internal_notes" defaultValue={request.internal_notes || ""} />
+              </label>
+            </div>
+            <button className="btn-primary mt-6 w-full" type="submit">
+              Guardar cambios
+            </button>
+          </form>
+        </div>
       </section>
     </main>
   );
