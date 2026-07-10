@@ -11,7 +11,7 @@ export default async function AdminLoginPage({
   return (
     <main className="flex min-h-screen items-center justify-center bg-navy px-4">
       <form action={adminLogin} className="w-full max-w-md rounded-lg bg-white p-8 shadow-2xl">
-        <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-md bg-blue-50 text-ocean">
+        <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg bg-ocean/10 text-ocean">
           <LockKeyhole size={24} />
         </div>
         <h1 className="text-2xl font-bold">Acceso administrativo</h1>

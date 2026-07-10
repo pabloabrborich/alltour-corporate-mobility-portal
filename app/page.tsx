@@ -60,7 +60,7 @@ export default function HomePage() {
             <p className="mb-5 inline-flex rounded-full border border-white/20 bg-white/10 px-3 py-1 text-sm text-slate-200">
               Operaciones corporativas en Ecuador
             </p>
-            <h1 className="max-w-3xl text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">
+            <h1 className="font-display max-w-3xl text-4xl font-medium leading-tight sm:text-5xl lg:text-6xl">
               Logistica de transporte corporativo en Ecuador
             </h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-200">
@@ -76,7 +76,7 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
-          <div className="rounded-lg border border-white/10 bg-white/8 p-4 shadow-2xl backdrop-blur">
+          <div className="rounded-xl border border-white/10 bg-white/5 p-4 backdrop-blur">
             <div className="rounded-md bg-white p-5 text-ink">
               <div className="flex items-center justify-between border-b border-line pb-4">
                 <div>
@@ -149,7 +149,7 @@ export default function HomePage() {
           <div className="mt-8 grid gap-4 md:grid-cols-3 lg:grid-cols-6">
             {["Solicitar", "Revisar", "Confirmar", "Asignar vehiculo", "Operar", "Reportar"].map((step, index) => (
               <div key={step} className="panel p-5">
-                <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-md bg-navy text-sm font-bold text-white">
+                <span className="mb-4 flex h-9 w-9 items-center justify-center rounded-lg bg-ocean text-sm font-bold text-white">
                   {index + 1}
                 </span>
                 <p className="font-semibold">{step}</p>
@@ -190,11 +190,11 @@ function InfoBlock({
   return (
     <div className="panel p-6">
       <Icon className="mb-5 text-ocean" size={26} />
-      <h2 className="text-2xl font-bold">{title}</h2>
+      <h2 className="font-display text-3xl font-medium">{title}</h2>
       <div className="mt-5 space-y-3">
         {items.map((item) => (
           <p key={item} className="flex gap-3 text-steel">
-            <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-emerald-600" />
+            <CheckCircle2 size={18} className="mt-0.5 shrink-0 text-sage" />
             <span>{item}</span>
           </p>
         ))}
@@ -207,7 +207,7 @@ function SectionTitle({ eyebrow, title }: { eyebrow: string; title: string }) {
   return (
     <div>
       <p className="text-sm font-bold uppercase tracking-wider text-gold">{eyebrow}</p>
-      <h2 className="mt-2 max-w-3xl text-3xl font-bold text-ink">{title}</h2>
+      <h2 className="font-display mt-2 max-w-3xl text-4xl font-medium text-ink">{title}</h2>
     </div>
   );
 }

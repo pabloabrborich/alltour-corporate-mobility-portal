@@ -16,14 +16,14 @@ export default async function RequestSuccessPage({
       <section className="py-20">
         <div className="container-page">
           <div className="panel mx-auto max-w-2xl p-8 text-center">
-            <CheckCircle2 className="mx-auto text-emerald-600" size={44} />
+            <CheckCircle2 className="mx-auto text-sage" size={44} />
             <h1 className="mt-5 text-3xl font-bold">Su solicitud fue recibida</h1>
             <p className="mt-4 text-steel">
               ALLTOUR revisara disponibilidad y confirmara la operacion antes de asignar vehiculo y conductor.
             </p>
             {params.id ? <p className="mt-4 text-sm text-steel">Referencia: {params.id}</p> : null}
             {params.demo ? (
-              <p className="mt-4 rounded-md bg-amber-50 p-3 text-sm text-amber-800">
+              <p className="mt-4 rounded-md bg-gold/10 p-3 text-sm text-amber-900">
                 Solicitud recibida en modo local. Configure Supabase para guardar solicitudes reales.
               </p>
             ) : null}

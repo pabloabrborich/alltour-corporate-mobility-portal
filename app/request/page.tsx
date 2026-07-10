@@ -41,7 +41,7 @@ export default function RequestPage() {
           <p className="mb-3 flex items-center gap-2 text-sm font-semibold text-gold">
             <PlaneTakeoff size={17} /> Nueva solicitud
           </p>
-          <h1 className="max-w-3xl text-4xl font-bold">Solicitud de transporte corporativo</h1>
+          <h1 className="font-display max-w-3xl text-5xl font-medium">Solicitud de transporte corporativo</h1>
           <p className="mt-4 max-w-2xl text-slate-200">
             Complete los datos operativos. ALLTOUR revisara disponibilidad, asignacion y condiciones antes de confirmar.
           </p>

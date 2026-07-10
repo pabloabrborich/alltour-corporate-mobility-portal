@@ -1,12 +1,12 @@
 import { clsx } from "clsx";
 
 const styles: Record<string, string> = {
-  "Nueva solicitud": "border-blue-200 bg-blue-50 text-blue-700",
-  Confirmado: "border-emerald-200 bg-emerald-50 text-emerald-700",
-  "Vehiculo asignado": "border-amber-200 bg-amber-50 text-amber-700",
-  "En operacion": "border-purple-200 bg-purple-50 text-purple-700",
-  Completado: "border-slate-200 bg-slate-50 text-slate-700",
-  Cancelado: "border-red-200 bg-red-50 text-red-700"
+  "Nueva solicitud": "border-gold/40 bg-gold/10 text-amber-800",
+  Confirmado: "border-sage/40 bg-sage/10 text-green-800",
+  "Vehiculo asignado": "border-ocean/40 bg-ocean/10 text-ocean",
+  "En operacion": "border-ocean/40 bg-ocean/10 text-ocean",
+  Completado: "border-slate-300 bg-slate-100 text-slate-700",
+  Cancelado: "border-red-300 bg-red-50 text-red-700"
 };
 
 export function StatusPill({ status }: { status?: string | null }) {

@@ -32,7 +32,7 @@ export function RouteStopsTimeline({ stops }: { stops?: RouteStop[] | null }) {
         {stops.map((stop, index) => (
           <div key={`${stop.type}-${index}-${stop.place}`} className="grid gap-3 rounded-md border border-line bg-slate-50 p-4 md:grid-cols-[92px_1fr_auto]">
             <div>
-              <span className="status-pill border-blue-200 bg-blue-50 text-blue-700">{labels[stop.type] || "Parada"}</span>
+              <span className="status-pill border-ocean/30 bg-ocean/10 text-ocean">{labels[stop.type] || "Parada"}</span>
               <p className="mt-2 text-xs font-bold text-steel">#{index + 1}</p>
             </div>
             <div>

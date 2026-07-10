@@ -57,7 +57,7 @@ export default async function ServiceDetailPage({ params }: { params: Promise<{ 
         <div className="space-y-6">
           <div className="panel p-6">
             <p className="text-sm font-semibold text-gold">Ticket operativo</p>
-            <h1 className="mt-2 text-3xl font-bold">{request.companies?.name || "Empresa"}</h1>
+            <h1 className="font-display mt-2 text-4xl font-medium">{request.companies?.name || "Empresa"}</h1>
             <p className="mt-2 text-steel">
               {request.pickup_location} {"->"} {request.dropoff_location}
             </p>

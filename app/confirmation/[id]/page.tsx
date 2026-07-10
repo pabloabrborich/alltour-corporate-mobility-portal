@@ -26,7 +26,7 @@ export default async function ConfirmationPage({ params }: { params: Promise<{ i
               <CheckCircle2 className="text-gold" />
               <p className="font-semibold">Confirmacion de servicio ALLTOUR</p>
             </div>
-            <h1 className="mt-4 text-3xl font-bold">Detalle para pasajero</h1>
+            <h1 className="font-display mt-4 text-4xl font-medium">Detalle para pasajero</h1>
           </div>
 
           {request ? (

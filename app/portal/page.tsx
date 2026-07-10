@@ -14,7 +14,7 @@ export default function PortalPage() {
         <div className="container-page flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold text-gold">Plataforma operativa</p>
-            <h1 className="mt-2 text-4xl font-bold">Centro de control</h1>
+            <h1 className="font-display mt-2 text-5xl font-medium">Centro de control</h1>
             <p className="mt-3 max-w-2xl text-slate-200">
               Referencia visual de como ALLTOUR estructura servicios, itinerarios, pasajeros, confirmaciones y cierres operativos.
             </p>
