@@ -1,6 +1,6 @@
 # ALLTOUR Corporate Mobility Portal
 
-MVP web app para gestion de transporte corporativo en Ecuador: landing, formulario de solicitud, agenda interna, tickets operativos, demo de portal corporativo y pagina publica de confirmacion.
+MVP web app para gestion de transporte corporativo en Ecuador: landing, formulario de solicitud, agenda interna, tickets operativos, portal corporativo y pagina publica de confirmacion.
 
 ## Stack
 
@@ -58,7 +58,8 @@ npm run dev
 
 - `/` landing corporativa
 - `/request` formulario de solicitud
-- `/portal/demo` demo comercial del portal cliente
+- `/portal` portal corporativo
+- `/portal/demo` redireccion heredada hacia `/portal`
 - `/admin` agenda interna protegida por `ADMIN_PASSWORD`
 - `/admin/services/[id]` detalle y edicion del ticket operativo
 - `/confirmation/[id]` confirmacion publica para pasajero
@@ -71,4 +72,4 @@ El formulario permite agregar puntos ilimitados de recorrido: pickup, parada y d
 
 - El admin usa una cookie HTTP-only simple basada en `ADMIN_PASSWORD`; para una fase posterior conviene migrar a Supabase Auth o SSO corporativo.
 - Las acciones de servidor usan `SUPABASE_SERVICE_ROLE_KEY`; mantenga esa variable solo en servidor.
-- Si Supabase no esta configurado, las paginas publicas siguen renderizando y el formulario cae a una confirmacion demo.
+- Si Supabase no esta configurado, las paginas publicas siguen renderizando y el formulario cae a una confirmacion local.

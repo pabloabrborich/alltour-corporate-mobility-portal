@@ -71,8 +71,8 @@ export default function HomePage() {
               <Link href="/request" className="btn-primary">
                 Solicitar transporte corporativo <ArrowRight size={17} />
               </Link>
-              <Link href="/portal/demo" className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/25 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10">
-                Ver demo del portal
+              <Link href="/portal" className="inline-flex min-h-11 items-center justify-center rounded-md border border-white/25 px-5 py-2.5 text-sm font-semibold text-white hover:bg-white/10">
+                Ver portal corporativo
               </Link>
             </div>
           </div>

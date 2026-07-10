@@ -18,8 +18,8 @@ export function SiteHeader() {
           <Link href="/request" className="hover:text-white">
             Solicitud
           </Link>
-          <Link href="/portal/demo" className="hover:text-white">
-            Portal demo
+          <Link href="/portal" className="hover:text-white">
+            Portal corporativo
           </Link>
           <Link href="/admin" className="hover:text-white">
             Admin

@@ -24,15 +24,15 @@ export default async function RequestSuccessPage({
             {params.id ? <p className="mt-4 text-sm text-steel">Referencia: {params.id}</p> : null}
             {params.demo ? (
               <p className="mt-4 rounded-md bg-amber-50 p-3 text-sm text-amber-800">
-                Modo demo: configure Supabase para guardar solicitudes reales.
+                Solicitud recibida en modo local. Configure Supabase para guardar solicitudes reales.
               </p>
             ) : null}
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link href="/" className="btn-secondary">
                 Volver al inicio
               </Link>
-              <Link href="/portal/demo" className="btn-primary">
-                Ver portal demo
+              <Link href="/portal" className="btn-primary">
+                Ver portal corporativo
               </Link>
             </div>
           </div>
