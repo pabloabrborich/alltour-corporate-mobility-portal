@@ -11,7 +11,7 @@ export function SiteHeader() {
           </span>
           <span>
             <span className="block text-sm font-bold tracking-wide">ALLTOUR</span>
-            <span className="block text-xs text-slate-300">Corporate Mobility</span>
+            <span className="block text-xs text-slate-300">Movilidad y Transporte Corporativo</span>
           </span>
         </Link>
         <nav className="hidden items-center gap-6 text-sm text-slate-200 md:flex">

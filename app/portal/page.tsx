@@ -13,8 +13,8 @@ export default function PortalPage() {
       <section className="bg-navy py-10 text-white">
         <div className="container-page flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
-            <p className="text-sm font-semibold text-gold">Vista operativa corporativa</p>
-            <h1 className="mt-2 text-4xl font-bold">Corporate Mobility Desk</h1>
+            <p className="text-sm font-semibold text-gold">Plataforma operativa</p>
+            <h1 className="mt-2 text-4xl font-bold">Centro de control</h1>
             <p className="mt-3 max-w-2xl text-slate-200">
               Referencia visual de como ALLTOUR estructura servicios, itinerarios, pasajeros, confirmaciones y cierres operativos.
             </p>
