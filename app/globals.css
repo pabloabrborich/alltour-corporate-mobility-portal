@@ -81,7 +81,7 @@ select {
   }
 
   .btn-primary {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-ocean bg-ocean px-5 py-2.5 text-sm font-semibold text-white transition hover:border-teal-hover hover:bg-teal-hover;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-white bg-white px-5 py-2.5 text-sm font-semibold text-ink shadow-soft transition hover:border-warm-secondary hover:bg-warm-secondary;
   }
 
   .btn-secondary {
@@ -89,7 +89,7 @@ select {
   }
 
   .btn-dark {
-    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-ocean bg-ocean px-5 py-2.5 text-sm font-semibold text-white transition hover:border-teal-hover hover:bg-teal-hover;
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border border-navy bg-navy px-5 py-2.5 text-sm font-semibold text-white transition hover:border-portal-raised hover:bg-portal-raised;
   }
 
   .status-pill {
