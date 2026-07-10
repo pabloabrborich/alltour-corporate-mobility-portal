@@ -55,7 +55,7 @@ export function RouteStopsBuilder() {
         <div>
           <h2 className="text-lg font-bold text-ink">Itinerario y puntos del recorrido</h2>
           <p className="mt-1 text-sm text-steel">
-            Agregue todos los pickups, paradas y dropoffs necesarios. Use links de Google Maps para ubicaciones exactas.
+            Agregue pickups, paradas y dropoffs. El link de Google Maps abre el punto exacto; lugar y referencia alimentan la ruta completa.
           </p>
         </div>
         <button className="btn-secondary" type="button" onClick={() => addStop()}>

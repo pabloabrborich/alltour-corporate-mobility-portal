@@ -69,7 +69,7 @@ export function formatRouteStops(stops?: RouteStop[] | null) {
 
 function buildGoogleRouteUrl(stops: RouteStop[]) {
   const locations = stops
-    .map((stop) => stop.maps_url || stop.place || stop.reference)
+    .map((stop) => getDirectionsLocation(stop))
     .filter((location): location is string => Boolean(location));
   if (locations.length < 2) return null;
 
@@ -88,4 +88,31 @@ function buildGoogleRouteUrl(stops: RouteStop[]) {
   }
 
   return `https://www.google.com/maps/dir/?${params.toString()}`;
+}
+
+function getDirectionsLocation(stop: RouteStop) {
+  const coordinates = extractCoordinates(stop.maps_url);
+  if (coordinates) {
+    return coordinates;
+  }
+
+  const textLocation = [stop.place, stop.reference].filter(Boolean).join(", ").trim();
+  return textLocation || null;
+}
+
+function extractCoordinates(url?: string) {
+  if (!url) return null;
+
+  const decodedUrl = decodeURIComponent(url);
+  const atMatch = decodedUrl.match(/@(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+  if (atMatch) {
+    return `${atMatch[1]},${atMatch[2]}`;
+  }
+
+  const queryMatch = decodedUrl.match(/[?&](?:q|query|destination|origin)=(-?\d+(?:\.\d+)?),(-?\d+(?:\.\d+)?)/);
+  if (queryMatch) {
+    return `${queryMatch[1]},${queryMatch[2]}`;
+  }
+
+  return null;
 }
