@@ -8,21 +8,21 @@
   color-scheme: light;
   --font-dm-sans: "DM Sans";
   --font-cormorant: "Cormorant Garamond";
-  --portal-bg: #0b1626;
-  --portal-bg-soft: #101d2e;
-  --portal-surface: #142234;
-  --portal-surface-raised: #18283b;
+  --portal-bg: #111a17;
+  --portal-bg-soft: #16231f;
+  --portal-surface: #1a2a24;
+  --portal-surface-raised: #20332b;
   --portal-surface-light: #faf8f5;
   --portal-text: #f7f5f0;
-  --portal-text-secondary: #b8c2cf;
-  --portal-text-muted: #8491a1;
+  --portal-text-secondary: #c6c1b6;
+  --portal-text-muted: #918d84;
   --portal-text-dark: #1a1a18;
-  --portal-teal: #2a5c5c;
-  --portal-teal-hover: #3d7a7a;
-  --portal-teal-soft: rgba(42, 92, 92, 0.18);
-  --portal-gold: #c4a96a;
-  --portal-gold-soft: rgba(196, 169, 106, 0.14);
-  --portal-sage: #7a9b7a;
+  --portal-teal: #315c56;
+  --portal-teal-hover: #406a62;
+  --portal-teal-soft: rgba(49, 92, 86, 0.18);
+  --portal-gold: #bfa76a;
+  --portal-gold-soft: rgba(191, 167, 106, 0.14);
+  --portal-sage: #7f927c;
   --portal-border-dark: rgba(255, 255, 255, 0.09);
   --portal-border-light: rgba(26, 26, 24, 0.10);
   background: #faf8f5;
@@ -73,7 +73,7 @@ select {
 
   .field {
     @apply w-full rounded-lg border border-line bg-white px-3 py-2.5 text-sm text-ink outline-none transition focus:border-ocean focus:ring-2;
-    --tw-ring-color: rgba(42, 92, 92, 0.18);
+    --tw-ring-color: rgba(49, 92, 86, 0.18);
   }
 
   .label {
