@@ -52,8 +52,8 @@ export function BookingClient({ reference }: { reference?: string }) {
   }
 
   return (
-    <main className="min-h-screen bg-mist text-ink">
-      <header className="border-b border-line bg-mist/90">
+    <main className="min-h-screen bg-[#f7f1e8] text-ink">
+      <header className="border-b border-[#ded7ca] bg-[#fbf8f1]/90">
         <div className="container-page flex min-h-16 items-center justify-between gap-4">
           <Link href="/" className="text-sm font-bold tracking-[0.18em] text-ink">
             ALLTOUR ECUADOR
@@ -69,23 +69,23 @@ export function BookingClient({ reference }: { reference?: string }) {
         </div>
       </header>
 
-      <section className="container-page grid gap-10 py-10 lg:grid-cols-[0.9fr_1.1fr] lg:py-16">
+      <section className="container-page grid gap-10 bg-[radial-gradient(circle_at_82%_10%,rgba(191,167,106,0.24),transparent_30rem),radial-gradient(circle_at_12%_26%,rgba(49,92,86,0.12),transparent_26rem)] py-10 lg:grid-cols-[0.9fr_1.1fr] lg:py-16">
         <div className="lg:pt-10">
-          <p className="text-xs font-bold uppercase tracking-[0.16em] text-gold">Portal de reservas ALLTOUR</p>
-          <h1 className="font-display mt-4 max-w-3xl text-5xl font-medium leading-[0.95] text-ink md:text-7xl">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-ocean">Portal de reservas ALLTOUR</p>
+          <h1 className="font-display mt-4 max-w-3xl text-6xl font-semibold leading-[0.88] text-ink md:text-8xl">
             Elige la ruta. Elige el vehiculo.
           </h1>
-          <p className="mt-6 max-w-xl text-lg leading-8 text-steel">
+          <p className="mt-7 max-w-xl text-xl leading-9 text-steel">
             ALLTOUR coordina el resto. Tu solicitud entra a una mesa operativa para confirmar disponibilidad, ruta,
             vehiculo y seguimiento.
           </p>
-          <div className="mt-8 inline-flex rounded-full border border-line bg-white/70 px-4 py-3 text-xs font-bold uppercase tracking-[0.12em] text-ocean">
+          <div className="mt-10 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1]/70 px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-ocean">
             Sin codigos internos. Sin complejidad operativa.
           </div>
         </div>
 
-        <section id="book" className="overflow-hidden rounded-[1.5rem] border border-line bg-white/90 shadow-soft">
-          <div className="grid grid-cols-3 border-b border-line bg-warm-secondary">
+        <section id="book" className="overflow-hidden rounded-[1.7rem] border border-[#ded7ca] bg-[#fffdf9]/90 shadow-[0_24px_70px_rgba(23,33,29,0.14)] backdrop-blur">
+          <div className="grid grid-cols-3 border-b border-[#ded7ca] bg-[#f4ede4]">
             {[
               ["point", "Punto a punto"],
               ["hourly", "Por hora"],
@@ -93,8 +93,8 @@ export function BookingClient({ reference }: { reference?: string }) {
             ].map(([value, label]) => (
               <button
                 key={value}
-                className={`border-r border-line px-3 py-4 text-xs font-bold uppercase tracking-[0.08em] last:border-r-0 ${
-                  mode === value ? "bg-navy text-white" : "text-steel"
+                className={`border-r border-[#ded7ca] px-3 py-5 text-xs font-bold uppercase tracking-[0.08em] last:border-r-0 ${
+                  mode === value ? "bg-[#2f5a3d] text-white" : "text-steel"
                 }`}
                 type="button"
                 onClick={() => {
@@ -109,7 +109,7 @@ export function BookingClient({ reference }: { reference?: string }) {
           </div>
 
           {reference ? (
-            <div className="border-b border-line bg-ocean/10 p-5 text-ocean">
+            <div className="border-b border-[#ded7ca] bg-[#eef3eb] p-5 text-ocean">
               <div className="flex items-center gap-2 font-bold">
                 <CheckCircle2 size={18} /> Solicitud recibida
               </div>
@@ -198,7 +198,7 @@ export function BookingClient({ reference }: { reference?: string }) {
               ) : null}
 
               {airportTrip ? (
-                <div className="rounded-xl border border-dashed border-line bg-ocean/5 p-4 md:col-span-2">
+                <div className="rounded-xl border border-dashed border-[#ded7ca] bg-[#eef3eb] p-4 md:col-span-2">
                   <button
                     className="flex w-full items-center justify-between text-left text-sm font-bold uppercase tracking-[0.08em] text-ocean"
                     type="button"
@@ -236,7 +236,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             </div>
 
             <button
-              className="btn-dark mt-6 w-full"
+              className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]"
               type="button"
               onClick={() => {
                 setShowVehicles(true);
@@ -248,7 +248,7 @@ export function BookingClient({ reference }: { reference?: string }) {
 
             {showVehicles ? (
               <div className="mt-6 space-y-4">
-                <div className="rounded-xl bg-ocean/10 p-4 text-sm font-bold uppercase tracking-[0.08em] text-ocean">{priceStatus}</div>
+                <div className="rounded-xl bg-[#eef3eb] p-4 text-sm font-bold uppercase tracking-[0.08em] text-ocean">{priceStatus}</div>
                 <div className="grid gap-3">
                   {availableVehicles.map((vehicle) => {
                     const choice = getVehicleChoice(vehicle, passengers, mode, complexTrip, estimatedTrip);
@@ -257,7 +257,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                       <button
                         key={vehicle.code}
                         className={`grid w-full gap-4 rounded-xl border p-4 text-left transition md:grid-cols-[1fr_auto] ${
-                          selected ? "border-ocean bg-ocean/5 ring-4 ring-ocean/10" : "border-line bg-white hover:border-gold"
+                          selected ? "border-[#2f5a3d] bg-[#eef3eb] ring-4 ring-[#2f5a3d]/10" : "border-[#ded7ca] bg-white hover:border-gold"
                         }`}
                         type="button"
                         onClick={() => setSelectedVehicle(choice)}
@@ -271,7 +271,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                         <span className="text-left md:text-right">
                           <span className="block text-2xl font-bold">{choice.price}</span>
                           <span className="block text-xs uppercase text-steel">{choice.status}</span>
-                          <span className="mt-2 inline-flex rounded-full bg-navy px-3 py-1 text-xs font-bold uppercase text-white">
+                          <span className="mt-2 inline-flex rounded-full bg-ink px-3 py-1 text-xs font-bold uppercase text-white">
                             {choice.price.includes("$") ? "Reservar" : "Solicitar"}
                           </span>
                         </span>
@@ -281,7 +281,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                 </div>
 
                 {selectedVehicle ? (
-                  <div className="rounded-xl border border-line bg-warm-secondary p-5">
+                  <div className="rounded-xl border border-[#ded7ca] bg-[#fbf8f1] p-5">
                     <p className="text-sm font-bold uppercase tracking-[0.08em] text-ocean">
                       {selectedVehicle.vehicle} - {selectedVehicle.price} - {selectedVehicle.status}
                     </p>
@@ -303,7 +303,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                         <textarea className="field min-h-24" name="customer_notes" placeholder="Pasajero, letrero, equipaje o notas de horario" />
                       </label>
                     </div>
-                    <button className="btn-dark mt-5 w-full" type="submit">
+                    <button className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]" type="submit">
                       Enviar solicitud
                     </button>
                   </div>
@@ -314,12 +314,12 @@ export function BookingClient({ reference }: { reference?: string }) {
         </section>
       </section>
 
-      <section id="support" className="container-page grid gap-5 pb-12 md:grid-cols-2">
-        <div className="panel p-6">
+      <section id="support" className="container-page grid gap-5 bg-[#f7f1e8] pb-12 md:grid-cols-2">
+        <div className="rounded-xl border border-[#ded7ca] bg-[#fbf8f1] p-6">
           <h2 className="font-display text-3xl font-medium">Proximos viajes</h2>
           <p className="mt-3 text-sm text-steel">Al confirmar, ALLTOUR centraliza agenda, vehiculo, conductor y soporte.</p>
         </div>
-        <div className="panel p-6">
+        <div className="rounded-xl border border-[#ded7ca] bg-[#fbf8f1] p-6">
           <h2 className="font-display text-3xl font-medium">Soporte operativo</h2>
           <p className="mt-3 text-sm text-steel">Tu solicitud queda registrada para seguimiento manual por el equipo ALLTOUR.</p>
         </div>
@@ -365,11 +365,11 @@ function RouteInput({
         required={!name.startsWith("stop")}
       />
       {open && filteredPlaces.length ? (
-        <div className="absolute z-20 mt-2 max-h-64 w-full overflow-y-auto rounded-lg border border-line bg-white p-1 shadow-soft">
+        <div className="absolute z-20 mt-2 max-h-64 w-full overflow-y-auto rounded-lg border border-[#ded7ca] bg-[#fffdf9] p-1 shadow-soft">
           {filteredPlaces.map((place) => (
             <button
               key={place}
-              className="block w-full rounded-md px-3 py-2 text-left text-sm text-ink hover:bg-warm-secondary"
+              className="block w-full rounded-md px-3 py-2 text-left text-sm text-ink hover:bg-[#f4ede4]"
               type="button"
               onMouseDown={(event) => {
                 event.preventDefault();
@@ -380,7 +380,7 @@ function RouteInput({
               {place}
             </button>
           ))}
-          <div className="border-t border-line px-3 py-2 text-xs text-steel">Puedes escribir otra direccion si no aparece en la lista.</div>
+          <div className="border-t border-[#ded7ca] px-3 py-2 text-xs text-steel">Puedes escribir otra direccion si no aparece en la lista.</div>
         </div>
       ) : null}
     </label>
