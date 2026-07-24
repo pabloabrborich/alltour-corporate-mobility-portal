@@ -69,7 +69,7 @@ export function BookingClient({ reference }: { reference?: string }) {
         </div>
       </header>
 
-      <section className="container-page grid gap-10 bg-[radial-gradient(circle_at_82%_10%,rgba(191,167,106,0.20),transparent_28rem),radial-gradient(circle_at_12%_26%,rgba(49,92,86,0.10),transparent_24rem)] py-10 lg:grid-cols-[0.92fr_1.08fr] lg:py-14">
+      <section className="container-page grid gap-10 py-10 lg:grid-cols-[0.92fr_1.08fr] lg:py-14">
         <div className="lg:pt-12">
           <p className="text-xs font-medium uppercase tracking-[0.22em] text-ocean">Portal de reservas ALLTOUR</p>
           <h1 className="font-display mt-5 max-w-2xl text-5xl font-medium leading-[0.95] text-ink md:text-7xl">
