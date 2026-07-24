@@ -13,9 +13,17 @@ export const cityLocations: Record<string, string[]> = {
     "Quito Centro Norte / La Carolina",
     "Swissotel Quito",
     "JW Marriott Quito",
+    "Hilton Colon Quito",
+    "Go Quito Hotel",
+    "Hotel Dann Carlton Quito",
+    "Hotel Sheraton Quito",
+    "Quicentro Shopping",
+    "Parque La Carolina",
     "Centro de Convenciones Quito",
     "Quito Centro Historico",
     "Cumbaya",
+    "Tumbaco",
+    "Puembo",
     "Valle de los Chillos",
     "Mitad del Mundo",
     "Otavalo",
@@ -25,9 +33,14 @@ export const cityLocations: Record<string, string[]> = {
     "Aeropuerto de Guayaquil",
     "Hotel Oro Verde Guayaquil",
     "Hilton Colon Guayaquil",
+    "Wyndham Guayaquil",
+    "Courtyard by Marriott Guayaquil",
+    "Mall del Sol",
     "Puerto Santa Ana",
+    "Malecon 2000",
     "Centro de Convenciones Guayaquil",
     "Samborondon",
+    "Parque Historico Guayaquil",
     "Duran",
     "Salinas"
   ],
@@ -35,18 +48,26 @@ export const cityLocations: Record<string, string[]> = {
     "Aeropuerto Mariscal La Mar",
     "Centro Historico de Cuenca",
     "Hotel Oro Verde Cuenca",
+    "Mansion Alcazar Cuenca",
+    "Hotel Santa Lucia Cuenca",
     "Parque Calderon",
     "Turi",
+    "Museo Pumapungo",
+    "Universidad de Cuenca",
+    "Parque Nacional Cajas",
     "Gualaceo",
     "Chordeleg"
   ],
   manta: [
     "Aeropuerto Eloy Alfaro Manta",
     "Hotel Oro Verde Manta",
+    "Wyndham Manta Sail Plaza",
+    "Mall del Pacifico",
     "Puerto de Manta",
     "Ciudad del Sol Manta",
     "Montecristi",
-    "Portoviejo"
+    "Portoviejo",
+    "Santa Marianita"
   ],
   galapagos: [
     "Aeropuerto Seymour Baltra",
@@ -54,7 +75,10 @@ export const cityLocations: Record<string, string[]> = {
     "Puerto Ayora",
     "Hotel en Santa Cruz",
     "Muelle de Puerto Ayora",
-    "Tortuga Bay"
+    "Tortuga Bay",
+    "Estacion Cientifica Charles Darwin",
+    "Los Gemelos",
+    "Rancho Primicias"
   ]
 };
 
