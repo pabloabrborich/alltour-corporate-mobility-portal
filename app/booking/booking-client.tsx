@@ -69,22 +69,22 @@ export function BookingClient({ reference }: { reference?: string }) {
         </div>
       </header>
 
-      <section className="container-page grid gap-10 bg-[radial-gradient(circle_at_82%_10%,rgba(191,167,106,0.24),transparent_30rem),radial-gradient(circle_at_12%_26%,rgba(49,92,86,0.12),transparent_26rem)] py-10 lg:grid-cols-[0.9fr_1.1fr] lg:py-16">
-        <div className="lg:pt-10">
-          <p className="text-xs font-bold uppercase tracking-[0.22em] text-ocean">Portal de reservas ALLTOUR</p>
-          <h1 className="font-display mt-4 max-w-3xl text-6xl font-semibold leading-[0.88] text-ink md:text-8xl">
+      <section className="container-page grid gap-10 bg-[radial-gradient(circle_at_82%_10%,rgba(191,167,106,0.20),transparent_28rem),radial-gradient(circle_at_12%_26%,rgba(49,92,86,0.10),transparent_24rem)] py-10 lg:grid-cols-[0.92fr_1.08fr] lg:py-14">
+        <div className="lg:pt-12">
+          <p className="text-xs font-bold uppercase tracking-[0.24em] text-ocean">Portal de reservas ALLTOUR</p>
+          <h1 className="font-display mt-5 max-w-2xl text-5xl font-medium leading-[0.95] text-ink md:text-7xl">
             Elige la ruta. Elige el vehiculo.
           </h1>
-          <p className="mt-7 max-w-xl text-xl leading-9 text-steel">
+          <p className="mt-7 max-w-xl text-lg leading-8 text-steel">
             ALLTOUR coordina el resto. Tu solicitud entra a una mesa operativa para confirmar disponibilidad, ruta,
             vehiculo y seguimiento.
           </p>
-          <div className="mt-10 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1]/70 px-5 py-3 text-xs font-bold uppercase tracking-[0.12em] text-ocean">
+          <div className="mt-9 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1]/70 px-4 py-3 text-xs font-bold uppercase tracking-[0.10em] text-ocean">
             Sin codigos internos. Sin complejidad operativa.
           </div>
         </div>
 
-        <section id="book" className="overflow-hidden rounded-[1.7rem] border border-[#ded7ca] bg-[#fffdf9]/90 shadow-[0_24px_70px_rgba(23,33,29,0.14)] backdrop-blur">
+        <section id="book" className="overflow-hidden rounded-2xl border border-[#ded7ca] bg-[#fffdf9]/90 shadow-[0_18px_54px_rgba(23,33,29,0.11)] backdrop-blur">
           <div className="grid grid-cols-3 border-b border-[#ded7ca] bg-[#f4ede4]">
             {[
               ["point", "Punto a punto"],
@@ -93,7 +93,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             ].map(([value, label]) => (
               <button
                 key={value}
-                className={`border-r border-[#ded7ca] px-3 py-5 text-xs font-bold uppercase tracking-[0.08em] last:border-r-0 ${
+                className={`border-r border-[#ded7ca] px-3 py-4 text-xs font-bold uppercase tracking-[0.08em] last:border-r-0 ${
                   mode === value ? "bg-[#2f5a3d] text-white" : "text-steel"
                 }`}
                 type="button"
@@ -117,7 +117,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             </div>
           ) : null}
 
-          <form action={createTransportRequest} className="p-5 md:p-7">
+          <form action={createTransportRequest} className="p-5 md:p-6">
             <input type="hidden" name="booking_mode" value={mode} />
             <input type="hidden" name="stops" value={JSON.stringify(stops.filter(Boolean).map((place) => ({ place })))} />
             <input type="hidden" name="is_airport_trip" value={String(airportTrip)} />
@@ -236,7 +236,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             </div>
 
             <button
-              className="mt-7 inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]"
+              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]"
               type="button"
               onClick={() => {
                 setShowVehicles(true);
@@ -303,7 +303,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                         <textarea className="field min-h-24" name="customer_notes" placeholder="Pasajero, letrero, equipaje o notas de horario" />
                       </label>
                     </div>
-                    <button className="mt-5 inline-flex min-h-12 w-full items-center justify-center rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]" type="submit">
+                    <button className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]" type="submit">
                       Enviar solicitud
                     </button>
                   </div>
