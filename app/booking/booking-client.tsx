@@ -361,9 +361,10 @@ function RouteInput({
           setOpen(true);
         }}
         onFocus={() => setOpen(true)}
-        placeholder={places[0] || "Lugar o direccion"}
+        placeholder="Hotel, aeropuerto, direccion o link de Google Maps"
         required={!name.startsWith("stop")}
       />
+      <p className="mt-1 text-xs text-steel">Puedes escribir una direccion o pegar un link de Google Maps.</p>
       {open && filteredPlaces.length ? (
         <div className="absolute z-20 mt-2 max-h-64 w-full overflow-y-auto rounded-lg border border-[#ded7ca] bg-[#fffdf9] p-1 shadow-soft">
           {filteredPlaces.map((place) => (

@@ -71,10 +71,16 @@ export default async function AdminTransportPage() {
                       <td className="px-5 py-4 capitalize">{request.city}</td>
                       <td className="px-5 py-4">
                         <div className="font-semibold">
-                          {request.pickup} {"->"} {request.destination}
+                          <LocationValue value={request.pickup} /> {"->"} <LocationValue value={request.destination} />
                         </div>
                         {request.stops?.length ? (
-                          <div className="mt-1 text-xs text-steel">Paradas: {request.stops.map((stop) => stop.place).join(", ")}</div>
+                          <div className="mt-1 space-y-1 text-xs text-steel">
+                            {request.stops.map((stop, index) => (
+                              <div key={`${stop.place}-${index}`}>
+                                Parada {index + 1}: <LocationValue value={stop.place} />
+                              </div>
+                            ))}
+                          </div>
                         ) : null}
                         {request.customer_notes ? <div className="mt-1 text-xs text-steel">Notas: {request.customer_notes}</div> : null}
                       </td>
@@ -162,4 +168,20 @@ Vehiculo: ${request.selected_vehicle}
 Precio/estado: ${request.price_shown} - ${request.price_status}
 
 Te ayudamos a confirmar disponibilidad y detalles del servicio.`;
+}
+
+function LocationValue({ value }: { value: string }) {
+  if (isMapUrl(value)) {
+    return (
+      <a className="font-semibold text-ocean underline underline-offset-2" href={value} target="_blank" rel="noreferrer">
+        Abrir mapa
+      </a>
+    );
+  }
+
+  return <span>{value}</span>;
+}
+
+function isMapUrl(value: string) {
+  return /^https?:\/\//i.test(value.trim());
 }
