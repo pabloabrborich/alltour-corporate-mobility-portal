@@ -19,6 +19,9 @@ export function SiteHeader() {
           <Link href="/request" className="hover:text-white">
             Solicitud
           </Link>
+          <Link href="/booking" className="hover:text-white">
+            Booking
+          </Link>
           <Link href="/portal" className="hover:text-white">
             Portal corporativo
           </Link>

@@ -67,3 +67,35 @@ export type ServiceTicket = {
   created_at: string;
   service_requests?: ServiceRequest | null;
 };
+
+export type TransportStop = {
+  place: string;
+};
+
+export type TransportRequest = {
+  id: string;
+  reference: string;
+  status: string;
+  city: string;
+  booking_mode: string;
+  pickup: string;
+  destination: string;
+  stops: TransportStop[] | null;
+  when_type: string;
+  scheduled_date: string | null;
+  scheduled_time: string | null;
+  passengers: number;
+  is_airport_trip: boolean;
+  flight_number: string | null;
+  flight_direction: string | null;
+  meet_and_greet: string | null;
+  selected_vehicle: string;
+  price_shown: string;
+  price_status: string;
+  customer_name: string;
+  customer_phone: string;
+  customer_email: string | null;
+  customer_notes: string | null;
+  created_at: string;
+  updated_at: string;
+};

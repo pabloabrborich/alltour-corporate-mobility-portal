@@ -143,9 +143,14 @@ function AdminHeader() {
         <Link href="/" className="font-bold text-navy">
           ALLTOUR Admin
         </Link>
-        <Link href="/portal" className="btn-secondary">
-          Portal corporativo
-        </Link>
+        <div className="flex gap-2">
+          <Link href="/admin/transport" className="btn-secondary">
+            Inbox reservas
+          </Link>
+          <Link href="/portal" className="btn-secondary">
+            Portal corporativo
+          </Link>
+        </div>
       </div>
     </header>
   );

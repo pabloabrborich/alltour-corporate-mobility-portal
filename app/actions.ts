@@ -45,6 +45,30 @@ function parseRouteStops(formData: FormData): RouteStop[] | null {
   }
 }
 
+function parseTransportStops(formData: FormData) {
+  const raw = optional(formData, "stops");
+  if (!raw) return null;
+
+  try {
+    const parsed = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return null;
+
+    const stops = parsed
+      .map((stop) => ({ place: String(stop.place || "").trim() }))
+      .filter((stop) => stop.place);
+
+    return stops.length ? stops : null;
+  } catch {
+    return null;
+  }
+}
+
+function generateTransportReference() {
+  const timestamp = Date.now().toString(36).toUpperCase();
+  const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `AT-${timestamp}-${random}`;
+}
+
 export async function createServiceRequest(formData: FormData) {
   if (!hasSupabaseConfig()) {
     redirect("/request/success?demo=1");
@@ -150,6 +174,49 @@ export async function createServiceRequest(formData: FormData) {
   redirect(`/request/success?id=${request.id}`);
 }
 
+export async function createTransportRequest(formData: FormData) {
+  if (!hasSupabaseConfig()) {
+    redirect(`/booking?demo=1&reference=${generateTransportReference()}`);
+  }
+
+  const supabase = getSupabaseAdminClient();
+  const reference = generateTransportReference();
+
+  const payload = {
+    reference,
+    status: "nuevo",
+    city: required(formData, "city"),
+    booking_mode: required(formData, "booking_mode"),
+    pickup: required(formData, "pickup"),
+    destination: required(formData, "destination"),
+    stops: parseTransportStops(formData),
+    when_type: required(formData, "when_type"),
+    scheduled_date: optional(formData, "scheduled_date"),
+    scheduled_time: optional(formData, "scheduled_time"),
+    passengers: Number(required(formData, "passengers")),
+    is_airport_trip: optional(formData, "is_airport_trip") === "true",
+    flight_number: optional(formData, "flight_number"),
+    flight_direction: optional(formData, "flight_direction"),
+    meet_and_greet: optional(formData, "meet_and_greet"),
+    selected_vehicle: required(formData, "selected_vehicle"),
+    price_shown: required(formData, "price_shown"),
+    price_status: required(formData, "price_status"),
+    customer_name: required(formData, "customer_name"),
+    customer_phone: required(formData, "customer_phone"),
+    customer_email: optional(formData, "customer_email"),
+    customer_notes: optional(formData, "customer_notes")
+  };
+
+  const { error } = await supabase.from("transport_requests").insert(payload);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/admin/transport");
+  redirect(`/booking?reference=${reference}`);
+}
+
 export async function adminLogin(formData: FormData) {
   const password = required(formData, "password");
   if (!process.env.ADMIN_PASSWORD || password !== process.env.ADMIN_PASSWORD) {
@@ -171,6 +238,23 @@ export async function updateRequestStatus(formData: FormData) {
   }
 
   revalidatePath("/admin");
+}
+
+export async function updateTransportRequestStatus(formData: FormData) {
+  const id = required(formData, "id");
+  const status = required(formData, "status");
+  const supabase = getSupabaseAdminClient();
+
+  const { error } = await supabase
+    .from("transport_requests")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/admin/transport");
 }
 
 export async function updateTicket(formData: FormData) {
