@@ -256,22 +256,22 @@ export function BookingClient({ reference }: { reference?: string }) {
                     return (
                       <button
                         key={vehicle.code}
-                        className={`grid w-full gap-4 rounded-xl border p-4 text-left transition md:grid-cols-[1fr_auto] ${
+                        className={`grid w-full gap-4 rounded-xl border px-4 py-3 text-left transition md:grid-cols-[1fr_auto] ${
                           selected ? "border-[#2f5a3d] bg-[#eef3eb] ring-4 ring-[#2f5a3d]/10" : "border-[#ded7ca] bg-white hover:border-gold"
                         }`}
                         type="button"
                         onClick={() => setSelectedVehicle(choice)}
                       >
                         <span>
-                          <span className="block text-sm font-semibold tracking-[0.04em]">{vehicle.code}</span>
-                          <span className="mt-1 block text-sm text-steel">
+                          <span className="block text-sm font-medium tracking-[0.03em] text-ink">{vehicle.code}</span>
+                          <span className="mt-1 block text-sm leading-6 text-steel">
                             {vehicle.label}. Hasta {vehicle.pax} pasajeros - {vehicle.luggage}
                           </span>
                         </span>
                         <span className="text-left md:text-right">
-                          <span className="block text-2xl font-bold">{choice.price}</span>
+                          <span className="block text-xl font-semibold text-ink">{choice.price}</span>
                           <span className="block text-xs text-steel">{choice.status}</span>
-                          <span className="mt-2 inline-flex rounded-full bg-ink px-3 py-1 text-xs font-medium text-white">
+                          <span className="mt-2 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1] px-3 py-1 text-xs font-medium text-ink">
                             {choice.price.includes("$") ? "Reservar" : "Solicitar"}
                           </span>
                         </span>
