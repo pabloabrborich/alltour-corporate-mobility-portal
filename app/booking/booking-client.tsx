@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Plane, Plus, X } from "lucide-react";
 import { createTransportRequest } from "@/app/actions";
@@ -24,6 +24,9 @@ export function BookingClient({ reference }: { reference?: string }) {
   const [showVehicles, setShowVehicles] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleChoice | null>(null);
   const [airportOpen, setAirportOpen] = useState(false);
+  const confirmationRef = useRef<HTMLDivElement | null>(null);
+  const vehiclesRef = useRef<HTMLDivElement | null>(null);
+  const requestFormRef = useRef<HTMLDivElement | null>(null);
 
   const places = useMemo(() => {
     return city === "other" ? Object.values(cityLocations).flat() : cityLocations[city] || [];
@@ -39,6 +42,12 @@ export function BookingClient({ reference }: { reference?: string }) {
       : "Precio confirmado al instante";
 
   const availableVehicles = vehicleTypes.filter((vehicle) => passengers <= vehicle.pax);
+
+  useEffect(() => {
+    if (reference) {
+      confirmationRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [reference]);
 
   function changeCity(value: string) {
     setCity(value);
@@ -109,7 +118,7 @@ export function BookingClient({ reference }: { reference?: string }) {
           </div>
 
           {reference ? (
-            <div className="border-b border-[#ded7ca] bg-[#eef3eb] p-5 text-ocean">
+            <div ref={confirmationRef} className="border-b border-[#ded7ca] bg-[#eef3eb] p-5 text-ocean">
               <div className="flex items-center gap-2 font-bold">
                 <CheckCircle2 size={18} /> Solicitud recibida
               </div>
@@ -241,13 +250,16 @@ export function BookingClient({ reference }: { reference?: string }) {
               onClick={() => {
                 setShowVehicles(true);
                 setSelectedVehicle(null);
+                window.setTimeout(() => {
+                  vehiclesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                }, 80);
               }}
             >
               Ver vehiculos <ArrowRight size={16} />
             </button>
 
             {showVehicles ? (
-              <div className="mt-6 space-y-4">
+              <div ref={vehiclesRef} className="mt-6 scroll-mt-6 space-y-4">
                 <div className="rounded-xl bg-[#eef3eb] p-4 text-sm font-medium tracking-[0.02em] text-ocean">{priceStatus}</div>
                 <div className="grid gap-3">
                   {availableVehicles.map((vehicle) => {
@@ -260,7 +272,12 @@ export function BookingClient({ reference }: { reference?: string }) {
                           selected ? "border-[#2f5a3d] bg-[#eef3eb] ring-4 ring-[#2f5a3d]/10" : "border-[#ded7ca] bg-white hover:border-gold"
                         }`}
                         type="button"
-                        onClick={() => setSelectedVehicle(choice)}
+                        onClick={() => {
+                          setSelectedVehicle(choice);
+                          window.setTimeout(() => {
+                            requestFormRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                          }, 80);
+                        }}
                       >
                         <span>
                           <span className="block text-sm font-medium tracking-[0.03em] text-ink">{vehicle.code}</span>
@@ -281,7 +298,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                 </div>
 
                 {selectedVehicle ? (
-                  <div className="rounded-xl border border-[#ded7ca] bg-[#fbf8f1] p-5">
+                  <div ref={requestFormRef} className="scroll-mt-6 rounded-xl border border-[#ded7ca] bg-[#fbf8f1] p-5">
                     <p className="text-sm font-medium tracking-[0.02em] text-ocean">
                       {selectedVehicle.vehicle} - {selectedVehicle.price} - {selectedVehicle.status}
                     </p>
