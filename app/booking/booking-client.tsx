@@ -311,11 +311,6 @@ export function BookingClient({ reference }: { reference?: string }) {
               </div>
             ) : null}
           </form>
-          <datalist id="booking-places">
-            {places.map((place) => (
-              <option key={place} value={place} />
-            ))}
-          </datalist>
         </section>
       </section>
 
@@ -346,10 +341,48 @@ function RouteInput({
   onChange: (value: string) => void;
   places: string[];
 }) {
+  const [open, setOpen] = useState(false);
+  const filteredPlaces = places
+    .filter((place) => place.toLowerCase().includes(value.toLowerCase()))
+    .slice(0, 8);
+
   return (
-    <label className={name.startsWith("stop") ? "" : "md:col-span-2"}>
+    <label className={`relative ${name.startsWith("stop") ? "" : "md:col-span-2"}`}>
       <span className="label">{label}</span>
-      <input className="field" name={name} list="booking-places" value={value} onChange={(event) => onChange(event.target.value)} placeholder={places[0] || "Lugar o direccion"} required={!name.startsWith("stop")} />
+      <input
+        className="field"
+        name={name}
+        value={value}
+        onBlur={() => {
+          window.setTimeout(() => setOpen(false), 120);
+        }}
+        onChange={(event) => {
+          onChange(event.target.value);
+          setOpen(true);
+        }}
+        onFocus={() => setOpen(true)}
+        placeholder={places[0] || "Lugar o direccion"}
+        required={!name.startsWith("stop")}
+      />
+      {open && filteredPlaces.length ? (
+        <div className="absolute z-20 mt-2 max-h-64 w-full overflow-y-auto rounded-lg border border-line bg-white p-1 shadow-soft">
+          {filteredPlaces.map((place) => (
+            <button
+              key={place}
+              className="block w-full rounded-md px-3 py-2 text-left text-sm text-ink hover:bg-warm-secondary"
+              type="button"
+              onMouseDown={(event) => {
+                event.preventDefault();
+                onChange(place);
+                setOpen(false);
+              }}
+            >
+              {place}
+            </button>
+          ))}
+          <div className="border-t border-line px-3 py-2 text-xs text-steel">Puedes escribir otra direccion si no aparece en la lista.</div>
+        </div>
+      ) : null}
     </label>
   );
 }
