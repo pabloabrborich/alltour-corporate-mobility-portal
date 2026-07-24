@@ -71,7 +71,7 @@ export function BookingClient({ reference }: { reference?: string }) {
 
       <section className="container-page grid gap-10 bg-[radial-gradient(circle_at_82%_10%,rgba(191,167,106,0.20),transparent_28rem),radial-gradient(circle_at_12%_26%,rgba(49,92,86,0.10),transparent_24rem)] py-10 lg:grid-cols-[0.92fr_1.08fr] lg:py-14">
         <div className="lg:pt-12">
-          <p className="text-xs font-bold uppercase tracking-[0.24em] text-ocean">Portal de reservas ALLTOUR</p>
+          <p className="text-xs font-medium uppercase tracking-[0.22em] text-ocean">Portal de reservas ALLTOUR</p>
           <h1 className="font-display mt-5 max-w-2xl text-5xl font-medium leading-[0.95] text-ink md:text-7xl">
             Elige la ruta. Elige el vehiculo.
           </h1>
@@ -79,7 +79,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             ALLTOUR coordina el resto. Tu solicitud entra a una mesa operativa para confirmar disponibilidad, ruta,
             vehiculo y seguimiento.
           </p>
-          <div className="mt-9 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1]/70 px-4 py-3 text-xs font-bold uppercase tracking-[0.10em] text-ocean">
+          <div className="mt-9 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1]/70 px-4 py-3 text-xs font-medium tracking-[0.03em] text-ocean">
             Reservas corporativas con coordinacion ALLTOUR.
           </div>
         </div>
@@ -93,7 +93,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             ].map(([value, label]) => (
               <button
                 key={value}
-                className={`border-r border-[#ded7ca] px-3 py-4 text-xs font-bold uppercase tracking-[0.08em] last:border-r-0 ${
+                className={`border-r border-[#ded7ca] px-3 py-4 text-sm font-medium last:border-r-0 ${
                   mode === value ? "bg-[#2f5a3d] text-white" : "text-steel"
                 }`}
                 type="button"
@@ -200,7 +200,7 @@ export function BookingClient({ reference }: { reference?: string }) {
               {airportTrip ? (
                 <div className="rounded-xl border border-dashed border-[#ded7ca] bg-[#eef3eb] p-4 md:col-span-2">
                   <button
-                    className="flex w-full items-center justify-between text-left text-sm font-bold uppercase tracking-[0.08em] text-ocean"
+                    className="flex w-full items-center justify-between text-left text-sm font-medium text-ocean"
                     type="button"
                     onClick={() => setAirportOpen((value) => !value)}
                   >
@@ -236,7 +236,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             </div>
 
             <button
-              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]"
+              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-semibold tracking-[0.02em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]"
               type="button"
               onClick={() => {
                 setShowVehicles(true);
@@ -248,7 +248,7 @@ export function BookingClient({ reference }: { reference?: string }) {
 
             {showVehicles ? (
               <div className="mt-6 space-y-4">
-                <div className="rounded-xl bg-[#eef3eb] p-4 text-sm font-bold uppercase tracking-[0.08em] text-ocean">{priceStatus}</div>
+                <div className="rounded-xl bg-[#eef3eb] p-4 text-sm font-medium tracking-[0.02em] text-ocean">{priceStatus}</div>
                 <div className="grid gap-3">
                   {availableVehicles.map((vehicle) => {
                     const choice = getVehicleChoice(vehicle, passengers, mode, complexTrip, estimatedTrip);
@@ -263,15 +263,15 @@ export function BookingClient({ reference }: { reference?: string }) {
                         onClick={() => setSelectedVehicle(choice)}
                       >
                         <span>
-                          <span className="block text-sm font-bold uppercase tracking-[0.12em]">{vehicle.code}</span>
+                          <span className="block text-sm font-semibold tracking-[0.04em]">{vehicle.code}</span>
                           <span className="mt-1 block text-sm text-steel">
                             {vehicle.label}. Hasta {vehicle.pax} pasajeros - {vehicle.luggage}
                           </span>
                         </span>
                         <span className="text-left md:text-right">
                           <span className="block text-2xl font-bold">{choice.price}</span>
-                          <span className="block text-xs uppercase text-steel">{choice.status}</span>
-                          <span className="mt-2 inline-flex rounded-full bg-ink px-3 py-1 text-xs font-bold uppercase text-white">
+                          <span className="block text-xs text-steel">{choice.status}</span>
+                          <span className="mt-2 inline-flex rounded-full bg-ink px-3 py-1 text-xs font-medium text-white">
                             {choice.price.includes("$") ? "Reservar" : "Solicitar"}
                           </span>
                         </span>
@@ -282,7 +282,7 @@ export function BookingClient({ reference }: { reference?: string }) {
 
                 {selectedVehicle ? (
                   <div className="rounded-xl border border-[#ded7ca] bg-[#fbf8f1] p-5">
-                    <p className="text-sm font-bold uppercase tracking-[0.08em] text-ocean">
+                    <p className="text-sm font-medium tracking-[0.02em] text-ocean">
                       {selectedVehicle.vehicle} - {selectedVehicle.price} - {selectedVehicle.status}
                     </p>
                     <div className="mt-4 grid gap-4 md:grid-cols-2">
@@ -303,7 +303,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                         <textarea className="field min-h-24" name="customer_notes" placeholder="Pasajero, letrero, equipaje o notas de horario" />
                       </label>
                     </div>
-                    <button className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-bold uppercase tracking-[0.08em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]" type="submit">
+                    <button className="mt-5 inline-flex min-h-11 w-full items-center justify-center rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-semibold tracking-[0.02em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]" type="submit">
                       Enviar solicitud
                     </button>
                   </div>
