@@ -67,8 +67,9 @@ export const cityDefaults: Record<string, [string, string]> = {
 };
 
 export const vehicleTypes = [
-  { code: "EJECUTIVO", label: "Sedan o SUV premium", pax: 3, luggage: "2 maletas medianas", base: 48 },
-  { code: "VAN EJECUTIVA", label: "Transporte comodo para grupos", pax: 6, luggage: "6 maletas", base: 78 },
-  { code: "MINIBUS", label: "Grupos y delegaciones", pax: 18, luggage: "12 maletas", base: 155 },
-  { code: "BUS", label: "Eventos y grupos grandes", pax: 30, luggage: "Gestionado por cotizacion", base: null }
+  { code: "SEDAN EJECUTIVO", label: "Servicio privado para ejecutivos", pax: 2, luggage: "2 maletas medianas", base: 45 },
+  { code: "SUV PREMIUM", label: "Mayor comodidad para pasajeros y equipaje", pax: 4, luggage: "4 maletas medianas", base: 62 },
+  { code: "VAN EJECUTIVA", label: "Traslados corporativos y familias", pax: 7, luggage: "7 maletas", base: 85 },
+  { code: "MINIBUS CORPORATIVO", label: "Delegaciones, eventos y grupos medianos", pax: 18, luggage: "12 maletas", base: 165 },
+  { code: "BUS / GRUPO", label: "Eventos, convenciones y movimientos especiales", pax: 45, luggage: "Gestionado por cotizacion", base: null }
 ];
