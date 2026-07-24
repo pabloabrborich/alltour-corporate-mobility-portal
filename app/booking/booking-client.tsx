@@ -80,7 +80,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             vehiculo y seguimiento.
           </p>
           <div className="mt-9 inline-flex rounded-full border border-[#ded7ca] bg-[#fbf8f1]/70 px-4 py-3 text-xs font-bold uppercase tracking-[0.10em] text-ocean">
-            Sin codigos internos. Sin complejidad operativa.
+            Reservas corporativas con coordinacion ALLTOUR.
           </div>
         </div>
 
