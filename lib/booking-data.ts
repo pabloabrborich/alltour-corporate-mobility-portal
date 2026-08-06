@@ -97,3 +97,37 @@ export const vehicleTypes = [
   { code: "MINIBUS CORPORATIVO", label: "Delegaciones, eventos y grupos medianos", pax: 18, luggage: "12 maletas", base: 165 },
   { code: "BUS / GRUPO", label: "Eventos, convenciones y movimientos especiales", pax: 45, luggage: "Gestionado por cotizacion", base: null }
 ];
+
+export const destinationOptions = [
+  "Cruceros Galapagos",
+  "Galapagos",
+  "Amazonas",
+  "Andes Ecuador",
+  "Peru",
+  "India",
+  "Bali",
+  "Sri Lanka",
+  "Otro destino"
+];
+
+export const flightOriginOptions = [
+  "Quito (UIO)",
+  "Guayaquil (GYE)",
+  "Cuenca (CUE)",
+  "Manta (MEC)",
+  "Galapagos / Baltra (GPS)",
+  "Otro aeropuerto en Ecuador"
+];
+
+export const commonFlightDestinations = [
+  "Miami",
+  "Madrid",
+  "New York",
+  "Bogota",
+  "Lima",
+  "Buenos Aires",
+  "Santiago",
+  "Ciudad de Mexico",
+  "Panama",
+  "Destino mundial / por definir"
+];

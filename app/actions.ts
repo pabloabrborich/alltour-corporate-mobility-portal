@@ -69,6 +69,12 @@ function generateTransportReference() {
   return `AT-${timestamp}-${random}`;
 }
 
+function generateLeadReference() {
+  const timestamp = Date.now().toString(36).toUpperCase();
+  const random = Math.random().toString(36).slice(2, 6).toUpperCase();
+  return `AL-${timestamp}-${random}`;
+}
+
 export async function createServiceRequest(formData: FormData) {
   if (!hasSupabaseConfig()) {
     redirect("/request/success?demo=1");
@@ -217,6 +223,50 @@ export async function createTransportRequest(formData: FormData) {
   redirect(`/booking?reference=${reference}`);
 }
 
+export async function createLeadRequest(formData: FormData) {
+  const reference = generateLeadReference();
+
+  if (!hasSupabaseConfig()) {
+    redirect(`/booking?reference=${reference}`);
+  }
+
+  const supabase = getSupabaseAdminClient();
+  const leadType = required(formData, "lead_type");
+
+  const payload = {
+    reference,
+    lead_type: leadType,
+    status: "nuevo",
+    destination: optional(formData, "destination"),
+    origin: optional(formData, "origin"),
+    travel_date: optional(formData, "travel_date"),
+    tentative_date: optional(formData, "tentative_date"),
+    nights: optional(formData, "nights") ? Number(optional(formData, "nights")) : null,
+    adults: optional(formData, "adults") ? Number(optional(formData, "adults")) : null,
+    children: optional(formData, "children") ? Number(optional(formData, "children")) : null,
+    flight_from: optional(formData, "flight_from"),
+    flight_to: optional(formData, "flight_to"),
+    departure_date: optional(formData, "departure_date"),
+    return_date: optional(formData, "return_date"),
+    passengers: optional(formData, "passengers") ? Number(optional(formData, "passengers")) : null,
+    cabin_class: optional(formData, "cabin_class"),
+    customer_name: required(formData, "customer_name"),
+    customer_phone: required(formData, "customer_phone"),
+    customer_email: optional(formData, "customer_email"),
+    customer_notes: optional(formData, "customer_notes"),
+    payload: Object.fromEntries(formData.entries())
+  };
+
+  const { error } = await supabase.from("lead_requests").insert(payload);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/admin/leads");
+  redirect(`/booking?reference=${reference}`);
+}
+
 export async function adminLogin(formData: FormData) {
   const password = required(formData, "password");
   if (!process.env.ADMIN_PASSWORD || password !== process.env.ADMIN_PASSWORD) {
@@ -255,6 +305,23 @@ export async function updateTransportRequestStatus(formData: FormData) {
   }
 
   revalidatePath("/admin/transport");
+}
+
+export async function updateLeadRequestStatus(formData: FormData) {
+  const id = required(formData, "id");
+  const status = required(formData, "status");
+  const supabase = getSupabaseAdminClient();
+
+  const { error } = await supabase
+    .from("lead_requests")
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/admin/leads");
 }
 
 export async function updateTicket(formData: FormData) {

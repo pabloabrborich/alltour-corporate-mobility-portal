@@ -144,6 +144,9 @@ function AdminHeader() {
           ALLTOUR Admin
         </Link>
         <div className="flex gap-2">
+          <Link href="/admin/leads" className="btn-secondary">
+            Inbox leads
+          </Link>
           <Link href="/admin/transport" className="btn-secondary">
             Inbox reservas
           </Link>

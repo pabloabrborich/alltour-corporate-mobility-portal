@@ -3,10 +3,18 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Plane, Plus, X } from "lucide-react";
-import { createTransportRequest } from "@/app/actions";
-import { cityDefaults, cityLocations, cityOptions, vehicleTypes } from "@/lib/booking-data";
+import { createLeadRequest, createTransportRequest } from "@/app/actions";
+import {
+  cityDefaults,
+  cityLocations,
+  cityOptions,
+  commonFlightDestinations,
+  destinationOptions,
+  flightOriginOptions,
+  vehicleTypes
+} from "@/lib/booking-data";
 
-type Mode = "point" | "hourly" | "event";
+type Mode = "point" | "destination" | "flight";
 type VehicleChoice = {
   vehicle: string;
   price: string;
@@ -33,7 +41,7 @@ export function BookingClient({ reference }: { reference?: string }) {
   }, [city]);
 
   const airportTrip = isAirportTrip(pickup, destination);
-  const complexTrip = mode === "event" || stops.length > 5 || passengers > 18 || destination.toLowerCase().includes("cotopaxi");
+  const complexTrip = stops.length > 5 || passengers > 18 || destination.toLowerCase().includes("cotopaxi");
   const estimatedTrip = !complexTrip && !airportTrip && destination.trim().length > 0;
   const priceStatus = complexTrip
     ? "Cotizacion personalizada requerida"
@@ -97,8 +105,8 @@ export function BookingClient({ reference }: { reference?: string }) {
           <div className="grid grid-cols-3 border-b border-[#ded7ca] bg-[#f4ede4]">
             {[
               ["point", "Punto a punto"],
-              ["hourly", "Por hora"],
-              ["event", "Grupo / Evento"]
+              ["destination", "Destinos"],
+              ["flight", "Aereos"]
             ].map(([value, label]) => (
               <button
                 key={value}
@@ -126,6 +134,7 @@ export function BookingClient({ reference }: { reference?: string }) {
             </div>
           ) : null}
 
+          {mode === "point" ? (
           <form action={createTransportRequest} className="p-5 md:p-6">
             <input type="hidden" name="booking_mode" value={mode} />
             <input type="hidden" name="stops" value={JSON.stringify(stops.filter(Boolean).map((place) => ({ place })))} />
@@ -328,6 +337,29 @@ export function BookingClient({ reference }: { reference?: string }) {
               </div>
             ) : null}
           </form>
+          ) : mode === "destination" ? (
+            <LeadForm
+              leadType="destination"
+              title="Solicitud de destino"
+              description="Cuentanos lo basico. ALLTOUR te contacta para disenar el viaje y confirmar disponibilidad."
+              primaryOptions={destinationOptions}
+              primaryLabel="Destino"
+              primaryName="destination"
+              primaryPlaceholder="Selecciona o escribe el destino"
+              fields="destination"
+            />
+          ) : (
+            <LeadForm
+              leadType="flight"
+              title="Solicitud de aereos"
+              description="Dejanos la ruta base. ALLTOUR revisa opciones y te contacta para completar el requerimiento."
+              primaryOptions={commonFlightDestinations}
+              primaryLabel="Destino"
+              primaryName="flight_to"
+              primaryPlaceholder="Destino mundial"
+              fields="flight"
+            />
+          )}
         </section>
       </section>
 
@@ -342,6 +374,126 @@ export function BookingClient({ reference }: { reference?: string }) {
         </div>
       </section>
     </main>
+  );
+}
+
+function LeadForm({
+  leadType,
+  title,
+  description,
+  primaryOptions,
+  primaryLabel,
+  primaryName,
+  primaryPlaceholder,
+  fields
+}: {
+  leadType: "destination" | "flight";
+  title: string;
+  description: string;
+  primaryOptions: string[];
+  primaryLabel: string;
+  primaryName: string;
+  primaryPlaceholder: string;
+  fields: "destination" | "flight";
+}) {
+  return (
+    <form action={createLeadRequest} className="p-5 md:p-6">
+      <input type="hidden" name="lead_type" value={leadType} />
+      <div className="mb-5 rounded-xl bg-[#eef3eb] p-4 text-ocean">
+        <p className="font-display text-2xl font-medium text-ink">{title}</p>
+        <p className="mt-2 text-sm leading-6 text-steel">{description}</p>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        {fields === "flight" ? (
+          <label>
+            <span className="label">Origen</span>
+            <select className="field" name="flight_from" defaultValue="Quito (UIO)">
+              {flightOriginOptions.map((option) => (
+                <option key={option}>{option}</option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+
+        <label className={fields === "destination" ? "md:col-span-2" : ""}>
+          <span className="label">{primaryLabel}</span>
+          <input className="field" name={primaryName} list={`${leadType}-options`} placeholder={primaryPlaceholder} required />
+        </label>
+        <datalist id={`${leadType}-options`}>
+          {primaryOptions.map((option) => (
+            <option key={option} value={option} />
+          ))}
+        </datalist>
+
+        {fields === "destination" ? (
+          <>
+            <label>
+              <span className="label">Noches</span>
+              <input className="field" name="nights" min="1" placeholder="7" type="number" />
+            </label>
+            <label>
+              <span className="label">Fecha tentativa</span>
+              <input className="field" name="tentative_date" type="date" />
+            </label>
+            <label>
+              <span className="label">Adultos</span>
+              <input className="field" name="adults" min="1" placeholder="2" type="number" />
+            </label>
+            <label>
+              <span className="label">Ninos</span>
+              <input className="field" name="children" min="0" placeholder="0" type="number" />
+            </label>
+          </>
+        ) : (
+          <>
+            <label>
+              <span className="label">Salida tentativa</span>
+              <input className="field" name="departure_date" type="date" />
+            </label>
+            <label>
+              <span className="label">Retorno tentativa</span>
+              <input className="field" name="return_date" type="date" />
+            </label>
+            <label>
+              <span className="label">Pasajeros</span>
+              <input className="field" name="passengers" min="1" placeholder="1" type="number" />
+            </label>
+            <label>
+              <span className="label">Cabina</span>
+              <select className="field" name="cabin_class" defaultValue="Economy">
+                <option>Economy</option>
+                <option>Premium Economy</option>
+                <option>Business</option>
+                <option>First</option>
+                <option>Por definir</option>
+              </select>
+            </label>
+          </>
+        )}
+
+        <label>
+          <span className="label">Nombre</span>
+          <input className="field" name="customer_name" placeholder="Tu nombre" required />
+        </label>
+        <label>
+          <span className="label">Numero movil</span>
+          <input className="field" name="customer_phone" placeholder="WhatsApp o telefono" required />
+        </label>
+        <label className="md:col-span-2">
+          <span className="label">Correo opcional</span>
+          <input className="field" name="customer_email" type="email" placeholder="nombre@empresa.com" />
+        </label>
+        <label className="md:col-span-2">
+          <span className="label">Notas opcionales</span>
+          <textarea className="field min-h-24" name="customer_notes" placeholder="Preferencias, fechas flexibles, presupuesto o detalles importantes" />
+        </label>
+      </div>
+
+      <button className="mt-6 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-semibold tracking-[0.02em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]" type="submit">
+        Enviar solicitud <ArrowRight size={16} />
+      </button>
+    </form>
   );
 }
 
@@ -417,7 +569,7 @@ function getVehicleChoice(
   custom: boolean,
   estimate: boolean
 ): VehicleChoice {
-  const multiplier = mode === "hourly" ? 2.4 : mode === "event" ? 3.1 : 1;
+  const multiplier = 1;
   const passengerLift = passengers > 6 ? 1.3 : passengers > 3 ? 1.12 : 1;
   const price = vehicle.base ? Math.round(vehicle.base * multiplier * passengerLift) : null;
   const priceText = custom || !price ? "Solicitar cotizacion" : estimate ? `$${price}-${price + 25}` : `$${price}`;

@@ -26,6 +26,9 @@ export default async function AdminTransportPage() {
             <p className="text-xs text-steel">Solicitudes nuevas del portal de reservas</p>
           </div>
           <div className="flex gap-2">
+            <Link href="/admin/leads" className="btn-secondary">
+              Inbox leads
+            </Link>
             <Link href="/booking" className="btn-secondary">
               Ver booking
             </Link>

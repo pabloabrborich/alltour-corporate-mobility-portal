@@ -99,3 +99,30 @@ export type TransportRequest = {
   created_at: string;
   updated_at: string;
 };
+
+export type LeadRequest = {
+  id: string;
+  reference: string;
+  lead_type: "destination" | "flight" | string;
+  status: string;
+  destination: string | null;
+  origin: string | null;
+  travel_date: string | null;
+  tentative_date: string | null;
+  nights: number | null;
+  adults: number | null;
+  children: number | null;
+  flight_from: string | null;
+  flight_to: string | null;
+  departure_date: string | null;
+  return_date: string | null;
+  passengers: number | null;
+  cabin_class: string | null;
+  customer_name: string;
+  customer_phone: string;
+  customer_email: string | null;
+  customer_notes: string | null;
+  payload: Record<string, unknown> | null;
+  created_at: string;
+  updated_at: string;
+};
