@@ -3,16 +3,16 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ArrowRight, CheckCircle2, Plane, Plus, X } from "lucide-react";
-import { createLeadRequest, createTransportRequest } from "@/app/actions";
+import { createLeadRequest, createTransportRequest, getTransportPricingOptions } from "@/app/actions";
 import {
   cityDefaults,
   cityLocations,
   cityOptions,
   commonFlightDestinations,
   destinationOptions,
-  flightOriginOptions,
-  vehicleTypes
+  flightOriginOptions
 } from "@/lib/booking-data";
+import type { TransportPricingOption } from "@/lib/types";
 
 type Mode = "point" | "destination" | "flight";
 type VehicleChoice = {
@@ -31,6 +31,9 @@ export function BookingClient({ reference }: { reference?: string }) {
   const [passengers, setPassengers] = useState(4);
   const [showVehicles, setShowVehicles] = useState(false);
   const [selectedVehicle, setSelectedVehicle] = useState<VehicleChoice | null>(null);
+  const [availableVehicles, setAvailableVehicles] = useState<TransportPricingOption[]>([]);
+  const [pricingStatus, setPricingStatus] = useState("Solicita la ruta para ver opciones disponibles.");
+  const [pricingLoading, setPricingLoading] = useState(false);
   const [airportOpen, setAirportOpen] = useState(false);
   const confirmationRef = useRef<HTMLDivElement | null>(null);
   const vehiclesRef = useRef<HTMLDivElement | null>(null);
@@ -41,15 +44,6 @@ export function BookingClient({ reference }: { reference?: string }) {
   }, [city]);
 
   const airportTrip = isAirportTrip(pickup, destination);
-  const complexTrip = stops.length > 5 || passengers > 18 || destination.toLowerCase().includes("cotopaxi");
-  const estimatedTrip = !complexTrip && !airportTrip && destination.trim().length > 0;
-  const priceStatus = complexTrip
-    ? "Cotizacion personalizada requerida"
-    : estimatedTrip
-      ? "Precio estimado - ALLTOUR confirma tarifa final"
-      : "Precio confirmado al instante";
-
-  const availableVehicles = vehicleTypes.filter((vehicle) => passengers <= vehicle.pax);
 
   useEffect(() => {
     if (reference) {
@@ -65,7 +59,35 @@ export function BookingClient({ reference }: { reference?: string }) {
     setStops([]);
     setShowVehicles(false);
     setSelectedVehicle(null);
+    setAvailableVehicles([]);
+    setPricingStatus("Solicita la ruta para ver opciones disponibles.");
     setAirportOpen(false);
+  }
+
+  async function loadVehicles() {
+    setPricingLoading(true);
+    setShowVehicles(true);
+    setSelectedVehicle(null);
+
+    const result = await getTransportPricingOptions({
+      city,
+      pickup,
+      destination,
+      passengers,
+      stopsCount: stops.filter(Boolean).length
+    });
+
+    setAvailableVehicles(result.options);
+    setPricingStatus(
+      result.options.some((option) => !option.quoteRequired)
+        ? `Tarifa encontrada para ${result.route.origin} -> ${result.route.destination}.`
+        : "Solicitar cotizacion: ALLTOUR confirma tarifa y disponibilidad."
+    );
+    setPricingLoading(false);
+
+    window.setTimeout(() => {
+      vehiclesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
   }
 
   return (
@@ -118,6 +140,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                   setMode(value as Mode);
                   setShowVehicles(false);
                   setSelectedVehicle(null);
+                  setAvailableVehicles([]);
                 }}
               >
                 {label}
@@ -155,8 +178,28 @@ export function BookingClient({ reference }: { reference?: string }) {
                 </select>
               </label>
 
-              <RouteInput label="Donde te recogemos" name="pickup" value={pickup} onChange={setPickup} places={places} />
-              <RouteInput label="A donde vas" name="destination" value={destination} onChange={setDestination} places={places} />
+              <RouteInput
+                label="Donde te recogemos"
+                name="pickup"
+                value={pickup}
+                onChange={(value) => {
+                  setPickup(value);
+                  setShowVehicles(false);
+                  setSelectedVehicle(null);
+                }}
+                places={places}
+              />
+              <RouteInput
+                label="A donde vas"
+                name="destination"
+                value={destination}
+                onChange={(value) => {
+                  setDestination(value);
+                  setShowVehicles(false);
+                  setSelectedVehicle(null);
+                }}
+                places={places}
+              />
 
               <div className="space-y-3 md:col-span-2">
                 {stops.map((stop, index) => (
@@ -165,20 +208,36 @@ export function BookingClient({ reference }: { reference?: string }) {
                       label={`Parada ${index + 1}`}
                       name={`stop-${index}`}
                       value={stop}
-                      onChange={(value) => setStops((current) => current.map((item, itemIndex) => (itemIndex === index ? value : item)))}
+                      onChange={(value) => {
+                        setStops((current) => current.map((item, itemIndex) => (itemIndex === index ? value : item)));
+                        setShowVehicles(false);
+                        setSelectedVehicle(null);
+                      }}
                       places={places}
                     />
                     <button
                       className="mb-0 self-end rounded-lg border border-line bg-white px-3 py-3 text-danger"
                       type="button"
-                      onClick={() => setStops((current) => current.filter((_, itemIndex) => itemIndex !== index))}
+                      onClick={() => {
+                        setStops((current) => current.filter((_, itemIndex) => itemIndex !== index));
+                        setShowVehicles(false);
+                        setSelectedVehicle(null);
+                      }}
                       aria-label="Eliminar parada"
                     >
                       <X size={16} />
                     </button>
                   </div>
                 ))}
-                <button className="inline-flex items-center gap-2 text-sm font-bold text-ocean" type="button" onClick={() => setStops((current) => [...current, ""])}>
+                <button
+                  className="inline-flex items-center gap-2 text-sm font-bold text-ocean"
+                  type="button"
+                  onClick={() => {
+                    setStops((current) => [...current, ""]);
+                    setShowVehicles(false);
+                    setSelectedVehicle(null);
+                  }}
+                >
                   <Plus size={16} /> Agregar parada
                 </button>
               </div>
@@ -193,8 +252,17 @@ export function BookingClient({ reference }: { reference?: string }) {
 
               <label>
                 <span className="label">Pasajeros</span>
-                <select className="field" name="passengers" value={passengers} onChange={(event) => setPassengers(Number(event.target.value))}>
-                  {[1, 2, 3, 4, 5, 6, 12, 18, 30].map((value) => (
+                <select
+                  className="field"
+                  name="passengers"
+                  value={passengers}
+                  onChange={(event) => {
+                    setPassengers(Number(event.target.value));
+                    setShowVehicles(false);
+                    setSelectedVehicle(null);
+                  }}
+                >
+                  {[1, 2, 3, 4, 5, 6, 12, 15, 16, 18, 19, 25, 30, 33, 35, 40, 45].map((value) => (
                     <option key={value} value={value}>
                       {value}
                     </option>
@@ -254,29 +322,28 @@ export function BookingClient({ reference }: { reference?: string }) {
             </div>
 
             <button
-              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-semibold tracking-[0.02em] text-white transition hover:border-[#284b34] hover:bg-[#284b34]"
+              className="mt-7 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-xl border border-[#2f5a3d] bg-[#2f5a3d] px-5 py-3 text-sm font-semibold tracking-[0.02em] text-white transition hover:border-[#284b34] hover:bg-[#284b34] disabled:cursor-wait disabled:opacity-70"
               type="button"
-              onClick={() => {
-                setShowVehicles(true);
-                setSelectedVehicle(null);
-                window.setTimeout(() => {
-                  vehiclesRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-                }, 80);
-              }}
+              onClick={loadVehicles}
+              disabled={pricingLoading}
             >
-              Ver vehiculos <ArrowRight size={16} />
+              {pricingLoading ? "Consultando..." : "Ver vehiculos"} <ArrowRight size={16} />
             </button>
 
             {showVehicles ? (
               <div ref={vehiclesRef} className="mt-6 scroll-mt-6 space-y-4">
-                <div className="rounded-xl bg-[#eef3eb] p-4 text-sm font-medium tracking-[0.02em] text-ocean">{priceStatus}</div>
+                <div className="rounded-xl bg-[#eef3eb] p-4 text-sm font-medium tracking-[0.02em] text-ocean">{pricingStatus}</div>
                 <div className="grid gap-3">
                   {availableVehicles.map((vehicle) => {
-                    const choice = getVehicleChoice(vehicle, passengers, mode, complexTrip, estimatedTrip);
-                    const selected = selectedVehicle?.vehicle === choice.vehicle;
+                    const choice = {
+                      vehicle: vehicle.vehicle,
+                      price: vehicle.price,
+                      status: vehicle.status
+                    };
+                    const selected = selectedVehicle?.vehicle === choice.vehicle && selectedVehicle.price === choice.price;
                     return (
                       <button
-                        key={vehicle.code}
+                        key={`${vehicle.vehicle}-${vehicle.price}`}
                         className={`grid w-full gap-4 rounded-xl border px-4 py-3 text-left transition md:grid-cols-[1fr_auto] ${
                           selected ? "border-[#2f5a3d] bg-[#eef3eb] ring-4 ring-[#2f5a3d]/10" : "border-[#ded7ca] bg-white hover:border-gold"
                         }`}
@@ -289,7 +356,7 @@ export function BookingClient({ reference }: { reference?: string }) {
                         }}
                       >
                         <span>
-                          <span className="block text-sm font-medium tracking-[0.03em] text-ink">{vehicle.code}</span>
+                          <span className="block text-sm font-medium tracking-[0.03em] text-ink">{vehicle.vehicle}</span>
                           <span className="mt-1 block text-sm leading-6 text-steel">
                             {vehicle.label}. Hasta {vehicle.pax} pasajeros - {vehicle.luggage}
                           </span>
@@ -560,24 +627,4 @@ function RouteInput({
 function isAirportTrip(pickup: string, destination: string) {
   const combined = `${pickup} ${destination}`.toLowerCase();
   return combined.includes("airport") || combined.includes("aeropuerto") || combined.includes("uio");
-}
-
-function getVehicleChoice(
-  vehicle: (typeof vehicleTypes)[number],
-  passengers: number,
-  mode: Mode,
-  custom: boolean,
-  estimate: boolean
-): VehicleChoice {
-  const multiplier = 1;
-  const passengerLift = passengers > 6 ? 1.3 : passengers > 3 ? 1.12 : 1;
-  const price = vehicle.base ? Math.round(vehicle.base * multiplier * passengerLift) : null;
-  const priceText = custom || !price ? "Solicitar cotizacion" : estimate ? `$${price}-${price + 25}` : `$${price}`;
-  const caption = custom ? "Confirmado por ALLTOUR" : estimate ? "Total estimado" : "Reservar ahora";
-
-  return {
-    vehicle: vehicle.code,
-    price: priceText,
-    status: caption
-  };
 }

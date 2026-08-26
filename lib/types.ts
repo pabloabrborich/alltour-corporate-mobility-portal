@@ -100,6 +100,16 @@ export type TransportRequest = {
   updated_at: string;
 };
 
+export type TransportPricingOption = {
+  vehicle: string;
+  label: string;
+  pax: number;
+  luggage: string;
+  price: string;
+  status: string;
+  quoteRequired: boolean;
+};
+
 export type LeadRequest = {
   id: string;
   reference: string;

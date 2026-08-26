@@ -27,7 +27,26 @@ export const cityLocations: Record<string, string[]> = {
     "Valle de los Chillos",
     "Mitad del Mundo",
     "Otavalo",
-    "Parque Nacional Cotopaxi"
+    "Parque Nacional Cotopaxi",
+    "Guayaquil",
+    "Cuenca",
+    "Manta",
+    "Salinas",
+    "Santa Elena",
+    "Montanita",
+    "Esmeraldas",
+    "Tulcan",
+    "Lago Agrio",
+    "Coca",
+    "Tena",
+    "Misahualli",
+    "Loja",
+    "Machala",
+    "Macas",
+    "Puyo",
+    "Casa Sulto",
+    "Huigra",
+    "Alausi"
   ],
   guayaquil: [
     "Aeropuerto de Guayaquil",
@@ -42,7 +61,16 @@ export const cityLocations: Record<string, string[]> = {
     "Samborondon",
     "Parque Historico Guayaquil",
     "Duran",
-    "Salinas"
+    "Salinas",
+    "Cuenca",
+    "Manta",
+    "Santa Elena",
+    "Montanita",
+    "Puerto Lopez",
+    "Machala",
+    "Loja",
+    "Riobamba",
+    "Banos"
   ],
   cuenca: [
     "Aeropuerto Mariscal La Mar",
@@ -56,7 +84,13 @@ export const cityLocations: Record<string, string[]> = {
     "Universidad de Cuenca",
     "Parque Nacional Cajas",
     "Gualaceo",
-    "Chordeleg"
+    "Chordeleg",
+    "Loja",
+    "Machala",
+    "Riobamba",
+    "Banos",
+    "Ingapirca",
+    "Guayaquil"
   ],
   manta: [
     "Aeropuerto Eloy Alfaro Manta",
@@ -67,7 +101,13 @@ export const cityLocations: Record<string, string[]> = {
     "Ciudad del Sol Manta",
     "Montecristi",
     "Portoviejo",
-    "Santa Marianita"
+    "Santa Marianita",
+    "Guayaquil",
+    "Montanita",
+    "Puerto Lopez",
+    "Salinas",
+    "Pedernales",
+    "Esmeraldas"
   ],
   galapagos: [
     "Aeropuerto Seymour Baltra",
@@ -91,11 +131,12 @@ export const cityDefaults: Record<string, [string, string]> = {
 };
 
 export const vehicleTypes = [
-  { code: "SEDAN EJECUTIVO", label: "Servicio privado para ejecutivos", pax: 2, luggage: "2 maletas medianas", base: 45 },
-  { code: "SUV PREMIUM", label: "Mayor comodidad para pasajeros y equipaje", pax: 4, luggage: "4 maletas medianas", base: 62 },
-  { code: "VAN EJECUTIVA", label: "Traslados corporativos y familias", pax: 7, luggage: "7 maletas", base: 85 },
-  { code: "MINIBUS CORPORATIVO", label: "Delegaciones, eventos y grupos medianos", pax: 18, luggage: "12 maletas", base: 165 },
-  { code: "BUS / GRUPO", label: "Eventos, convenciones y movimientos especiales", pax: 45, luggage: "Gestionado por cotizacion", base: null }
+  { code: "SEDAN EJECUTIVO", label: "Servicio privado para ejecutivos", pax: 2, luggage: "2 maletas medianas" },
+  { code: "SUV PREMIUM", label: "Mayor comodidad para pasajeros y equipaje", pax: 4, luggage: "4 maletas medianas" },
+  { code: "VAN EJECUTIVA", label: "Traslados corporativos y familias", pax: 5, luggage: "5 maletas medianas" },
+  { code: "MINIBUS", label: "Grupos pequenos y delegaciones", pax: 15, luggage: "Equipaje moderado" },
+  { code: "MINIBUS CORPORATIVO", label: "Delegaciones, eventos y grupos medianos", pax: 19, luggage: "Equipaje grupal" },
+  { code: "BUS / GRUPO", label: "Eventos, convenciones y movimientos especiales", pax: 45, luggage: "Gestionado por cotizacion" }
 ];
 
 export const destinationOptions = [

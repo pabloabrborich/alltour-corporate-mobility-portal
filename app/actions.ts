@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
 import { setAdminCookie } from "@/lib/auth";
 import { createPortalToken } from "@/lib/company-portal";
+import { getAvailableTransportOptions } from "@/lib/transport-pricing";
 import type { RouteStop } from "@/lib/types";
 
 function required(formData: FormData, key: string) {
@@ -265,6 +266,16 @@ export async function createLeadRequest(formData: FormData) {
 
   revalidatePath("/admin/leads");
   redirect(`/booking?reference=${reference}`);
+}
+
+export async function getTransportPricingOptions(input: {
+  city: string;
+  pickup: string;
+  destination: string;
+  passengers: number;
+  stopsCount?: number;
+}) {
+  return getAvailableTransportOptions(input);
 }
 
 export async function adminLogin(formData: FormData) {
