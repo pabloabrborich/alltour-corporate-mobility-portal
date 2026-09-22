@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BarChart3, CalendarCheck, CheckCircle2, Clock3 } from "lucide-react";
+import { BarChart3, CalendarCheck, CheckCircle2, Clock3, FileText, ShieldCheck } from "lucide-react";
 import { Footer } from "@/components/footer";
 import { RouteStopsTimeline } from "@/components/route-stops-timeline";
 import { SiteHeader } from "@/components/site-header";
@@ -7,14 +7,22 @@ import { StatCard } from "@/components/stat-card";
 import { StatusPill } from "@/components/status-pill";
 import { formatDateTime } from "@/lib/format";
 import { getSupabaseAdminClient, hasSupabaseConfig } from "@/lib/supabase";
-import type { Company, ServiceRequest } from "@/lib/types";
+import type { Company, ServiceRequest, TransportRequest } from "@/lib/types";
 
 type CompanyPortalData = Company & {
   service_requests: ServiceRequest[];
+  transport_requests: TransportRequest[];
 };
 
-export default async function CompanyPortalPage({ params }: { params: Promise<{ token: string }> }) {
+export default async function CompanyPortalPage({
+  params,
+  searchParams
+}: {
+  params: Promise<{ token: string }>;
+  searchParams: Promise<{ code?: string }>;
+}) {
   const { token } = await params;
+  const { code } = await searchParams;
   const company = await getCompanyPortal(token);
 
   if (!company) {
@@ -35,10 +43,36 @@ export default async function CompanyPortalPage({ params }: { params: Promise<{ 
     );
   }
 
+  const accessCode = company.portal_access_code?.trim();
+  const unlocked = !accessCode || code?.trim().toLowerCase() === accessCode.toLowerCase();
+
+  if (!unlocked) {
+    return (
+      <main>
+        <SiteHeader />
+        <section className="container-page py-16">
+          <div className="panel mx-auto max-w-xl p-8">
+            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-gold">Portal corporativo</p>
+            <h1 className="font-display mt-3 text-4xl font-medium">{company.brand_name || company.name}</h1>
+            <p className="mt-3 text-sm text-steel">Ingrese el codigo de acceso para ver los servicios activos de esta cuenta.</p>
+            <form className="mt-6 grid gap-3">
+              <input className="field" name="code" placeholder="Codigo de acceso" />
+              <button className="btn-primary" type="submit">
+                Acceder
+              </button>
+            </form>
+          </div>
+        </section>
+        <Footer />
+      </main>
+    );
+  }
+
   const requests = company.service_requests || [];
-  const upcoming = requests.filter((request) => new Date(request.pickup_datetime) >= new Date());
-  const pending = requests.filter((request) => request.status !== "Completado" && request.status !== "Cancelado");
-  const completed = requests.filter((request) => request.status === "Completado");
+  const transportRequests = company.transport_requests || [];
+  const upcomingTransport = transportRequests.filter((request) => getTransportDate(request) >= new Date());
+  const pending = transportRequests.filter((request) => !["cerrado", "cancelado"].includes(request.status));
+  const completed = transportRequests.filter((request) => request.status === "cerrado");
 
   return (
     <main>
@@ -47,9 +81,9 @@ export default async function CompanyPortalPage({ params }: { params: Promise<{ 
         <div className="container-page flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold text-gold">Portal corporativo</p>
-            <h1 className="font-display mt-2 text-5xl font-medium">{company.name}</h1>
+            <h1 className="font-display mt-2 text-5xl font-medium">{company.brand_name || company.name}</h1>
             <p className="mt-3 max-w-2xl text-slate-200">
-              Servicios, itinerarios, estados operativos y confirmaciones asociadas a su empresa.
+              Servicios, vouchers, rutas y estados operativos asociados a su cuenta ALLTOUR.
             </p>
           </div>
           <Link href="/request" className="btn-primary">
@@ -60,10 +94,71 @@ export default async function CompanyPortalPage({ params }: { params: Promise<{ 
 
       <section className="container-page py-8">
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-          <StatCard label="Proximos servicios" value={upcoming.length} icon={CalendarCheck} />
+          <StatCard label="Proximos servicios" value={upcomingTransport.length} icon={CalendarCheck} />
           <StatCard label="Servicios activos" value={pending.length} icon={Clock3} />
           <StatCard label="Completados" value={completed.length} icon={CheckCircle2} />
-          <StatCard label="Volumen registrado" value={requests.length} icon={BarChart3} />
+          <StatCard label="Volumen registrado" value={transportRequests.length + requests.length} icon={BarChart3} />
+        </div>
+
+        <div className="panel mt-8 overflow-hidden">
+          <div className="border-b border-line p-5">
+            <h2 className="text-xl font-bold">Servicios de transporte</h2>
+            <p className="mt-1 text-sm text-steel">Reservas confirmadas, vouchers y detalles operativos disponibles para la cuenta.</p>
+          </div>
+          <div className="grid gap-4 p-5">
+            {transportRequests.map((request) => (
+              <article key={request.id} className="rounded-xl border border-line bg-white p-5">
+                <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+                  <div>
+                    <div className="flex flex-wrap items-center gap-2">
+                      <span className="font-mono text-xs font-bold uppercase tracking-[0.14em] text-steel">{request.reference}</span>
+                      <StatusPill status={request.status} />
+                      {request.is_vip ? (
+                        <span className="inline-flex items-center gap-1 rounded-full border border-gold/40 bg-gold/10 px-3 py-1 text-xs font-bold text-navy">
+                          <ShieldCheck size={14} /> VIP
+                        </span>
+                      ) : null}
+                    </div>
+                    <h3 className="mt-3 text-xl font-bold">{request.passenger_name || request.customer_name}</h3>
+                    <p className="mt-1 text-sm text-steel">
+                      {formatTransportDate(request)} | {request.passengers} pasajero{request.passengers === 1 ? "" : "s"}
+                    </p>
+                  </div>
+                  {request.voucher_token ? (
+                    <Link className="btn-primary" href={`/voucher/${request.voucher_token}`} target="_blank">
+                      <FileText size={16} /> Ver voucher
+                    </Link>
+                  ) : null}
+                </div>
+
+                <div className="mt-5 grid gap-4 md:grid-cols-2">
+                  <InfoBlock label="Ruta" value={`${request.pickup} -> ${request.destination}`} />
+                  <InfoBlock label="Vehiculo" value={request.assigned_vehicle || request.selected_vehicle} />
+                  <InfoBlock label="Vuelo" value={request.flight_number || "No registrado"} />
+                  <InfoBlock label="Seguridad" value={securityLabel(request.security_level)} />
+                </div>
+
+                {request.stops?.length ? (
+                  <div className="mt-4 rounded-lg bg-slate-50 p-4 text-sm text-steel">
+                    <span className="font-semibold text-navy">Paradas:</span>{" "}
+                    {request.stops.map((stop) => stop.place).join(" | ")}
+                  </div>
+                ) : null}
+
+                {request.operational_notes ? (
+                  <div className="mt-4 rounded-lg border border-line p-4 text-sm text-steel">
+                    <span className="font-semibold text-navy">Notas operativas:</span> {request.operational_notes}
+                  </div>
+                ) : null}
+              </article>
+            ))}
+
+            {transportRequests.length === 0 ? (
+              <div className="rounded-xl border border-line bg-white p-8 text-center text-steel">
+                Aun no hay servicios de transporte asociados a esta cuenta.
+              </div>
+            ) : null}
+          </div>
         </div>
 
         <div className="panel mt-8 overflow-hidden">
@@ -134,17 +229,71 @@ async function getCompanyPortal(token: string): Promise<CompanyPortalData | null
   }
 
   const supabase = getSupabaseAdminClient();
-  const { data, error } = await supabase
+  const { data: company, error } = await supabase
     .from("companies")
-    .select("*, service_requests(*)")
+    .select("*")
     .eq("portal_access_token", token)
     .eq("portal_enabled", true)
-    .order("pickup_datetime", { referencedTable: "service_requests", ascending: false })
     .single();
 
   if (error) {
     return null;
   }
 
-  return data as CompanyPortalData;
+  const [{ data: serviceRequests }, { data: transportRequests }] = await Promise.all([
+    supabase
+      .from("service_requests")
+      .select("*")
+      .eq("company_id", company.id)
+      .order("pickup_datetime", { ascending: false }),
+    supabase
+      .from("transport_requests")
+      .select("*")
+      .eq("company_id", company.id)
+      .order("created_at", { ascending: false })
+  ]);
+
+  return {
+    ...(company as Company),
+    service_requests: (serviceRequests || []) as ServiceRequest[],
+    transport_requests: (transportRequests || []) as TransportRequest[]
+  };
+}
+
+function InfoBlock({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-slate-50 p-4">
+      <div className="text-xs font-bold uppercase tracking-[0.12em] text-steel">{label}</div>
+      <div className="mt-1 font-semibold text-navy">{value}</div>
+    </div>
+  );
+}
+
+function getTransportDate(request: TransportRequest) {
+  const date = request.service_date || request.scheduled_date;
+  const time = request.service_time || request.scheduled_time || "00:00";
+  return date ? new Date(`${date}T${time}`) : new Date(request.created_at);
+}
+
+function formatTransportDate(request: TransportRequest) {
+  const date = request.service_date || request.scheduled_date;
+  const time = request.service_time || request.scheduled_time;
+
+  if (!date) {
+    return "Horario por confirmar";
+  }
+
+  return `${date}${time ? ` ${time}` : ""}`;
+}
+
+function securityLabel(value?: string | null) {
+  const labels: Record<string, string> = {
+    standard: "Servicio estandar",
+    vip_protocol: "Protocolo VIP",
+    security_agent: "Agente de seguridad disponible bajo solicitud",
+    armed_security: "Agente armado disponible bajo solicitud",
+    escort_vehicle: "Vehiculo custodio / caravana bajo solicitud"
+  };
+
+  return labels[value || "standard"] || labels.standard;
 }

@@ -1,12 +1,14 @@
 export type Company = {
   id: string;
   name: string;
+  brand_name?: string | null;
   contact_name: string | null;
   email: string | null;
   phone: string | null;
   industry: string | null;
   notes: string | null;
   portal_access_token: string | null;
+  portal_access_code?: string | null;
   portal_enabled: boolean | null;
   created_at: string;
 };
@@ -75,6 +77,7 @@ export type TransportStop = {
 export type TransportRequest = {
   id: string;
   reference: string;
+  company_id?: string | null;
   status: string;
   city: string;
   booking_mode: string;
@@ -92,12 +95,24 @@ export type TransportRequest = {
   selected_vehicle: string;
   price_shown: string;
   price_status: string;
+  passenger_name?: string | null;
+  service_date?: string | null;
+  service_time?: string | null;
+  assigned_vehicle?: string | null;
+  driver_name?: string | null;
+  driver_phone?: string | null;
+  vehicle_plate?: string | null;
+  is_vip?: boolean | null;
+  security_level?: string | null;
+  operational_notes?: string | null;
+  voucher_token?: string | null;
   customer_name: string;
   customer_phone: string;
   customer_email: string | null;
   customer_notes: string | null;
   created_at: string;
   updated_at: string;
+  companies?: Company | null;
 };
 
 export type TransportPricingOption = {

@@ -318,6 +318,35 @@ export async function updateTransportRequestStatus(formData: FormData) {
   revalidatePath("/admin/transport");
 }
 
+export async function updateTransportRequestOperations(formData: FormData) {
+  const id = required(formData, "id");
+  const supabase = getSupabaseAdminClient();
+  const companyId = optional(formData, "company_id");
+
+  const payload = {
+    company_id: companyId === "none" ? null : companyId,
+    passenger_name: optional(formData, "passenger_name"),
+    service_date: optional(formData, "service_date"),
+    service_time: optional(formData, "service_time"),
+    assigned_vehicle: optional(formData, "assigned_vehicle"),
+    driver_name: optional(formData, "driver_name"),
+    driver_phone: optional(formData, "driver_phone"),
+    vehicle_plate: optional(formData, "vehicle_plate"),
+    is_vip: optional(formData, "is_vip") === "on",
+    security_level: optional(formData, "security_level"),
+    operational_notes: optional(formData, "operational_notes"),
+    updated_at: new Date().toISOString()
+  };
+
+  const { error } = await supabase.from("transport_requests").update(payload).eq("id", id);
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  revalidatePath("/admin/transport");
+}
+
 export async function updateLeadRequestStatus(formData: FormData) {
   const id = required(formData, "id");
   const status = required(formData, "status");
