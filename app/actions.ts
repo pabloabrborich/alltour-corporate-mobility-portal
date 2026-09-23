@@ -327,6 +327,8 @@ export async function updateTransportRequestOperations(formData: FormData) {
   const payload = {
     company_id: companyId === "none" ? null : companyId,
     passenger_name: optional(formData, "passenger_name"),
+    passenger_phone: optional(formData, "passenger_phone"),
+    passenger_email: optional(formData, "passenger_email"),
     service_date: optional(formData, "service_date"),
     service_time: optional(formData, "service_time"),
     assigned_vehicle: optional(formData, "assigned_vehicle"),

@@ -26,7 +26,7 @@ export default async function VoucherPage({ params }: { params: Promise<{ token:
 
   const voucherUrl = `https://portal.alltourdmc.com/voucher/${token}`;
   const whatsappUrl = createWhatsappUrl(
-    request.customer_phone,
+    request.passenger_phone || request.customer_phone,
     `Hola ${request.passenger_name || request.customer_name}, este es tu voucher de servicio ALLTOUR: ${voucherUrl}`
   );
 
@@ -52,6 +52,11 @@ export default async function VoucherPage({ params }: { params: Promise<{ token:
         <div className="grid border-b border-[#1f2933] md:grid-cols-3">
           <VoucherCell label="Account" value={request.companies?.brand_name || request.companies?.name || "ALLTOUR CLIENT"} />
           <VoucherCell label="Passenger" value={request.passenger_name || request.customer_name} />
+          <VoucherCell label="Passenger Contact" value={request.passenger_phone || request.customer_phone || "TBC"} />
+        </div>
+
+        <div className="grid border-b border-[#1f2933] md:grid-cols-2">
+          <VoucherCell label="Coordinator" value={`${request.customer_name} / ${request.customer_phone}`} />
           <VoucherCell label="VIP / Security" value={`${request.is_vip ? "VIP YES" : "VIP NO"} / ${securityLabel(request.security_level)}`} />
         </div>
 

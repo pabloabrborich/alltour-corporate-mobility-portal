@@ -123,6 +123,9 @@ export default async function CompanyPortalPage({
                     <p className="mt-1 text-sm text-steel">
                       {formatTransportDate(request)} | {request.passengers} pasajero{request.passengers === 1 ? "" : "s"}
                     </p>
+                    {request.passenger_phone ? (
+                      <p className="mt-1 text-sm text-steel">Contacto PAX: {request.passenger_phone}</p>
+                    ) : null}
                   </div>
                   {request.voucher_token ? (
                     <Link className="btn-primary" href={`/voucher/${request.voucher_token}`} target="_blank">
@@ -134,6 +137,7 @@ export default async function CompanyPortalPage({
                 <div className="mt-5 grid gap-4 md:grid-cols-2">
                   <InfoBlock label="Ruta" value={`${request.pickup} -> ${request.destination}`} />
                   <InfoBlock label="Vehiculo" value={request.assigned_vehicle || request.selected_vehicle} />
+                  <InfoBlock label="Coordinador" value={`${request.customer_name} / ${request.customer_phone}`} />
                   <InfoBlock label="Vuelo" value={request.flight_number || "No registrado"} />
                   <InfoBlock label="Seguridad" value={securityLabel(request.security_level)} />
                 </div>

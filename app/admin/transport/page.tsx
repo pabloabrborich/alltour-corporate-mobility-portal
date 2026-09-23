@@ -80,10 +80,16 @@ export default async function AdminTransportPage({
                   const whatsappUrl = createWhatsappUrl(request.customer_phone, buildCustomerMessage(request));
                   const voucherPath = request.voucher_token ? `/voucher/${request.voucher_token}` : null;
                   const voucherUrl = voucherPath ? `https://portal.alltourdmc.com${voucherPath}` : null;
-                  const voucherWhatsappUrl = createWhatsappUrl(
+                  const passengerVoucherWhatsappUrl = createWhatsappUrl(
+                    request.passenger_phone || "",
+                    voucherUrl
+                      ? `Hola ${request.passenger_name || "pasajero"}, compartimos tu voucher de servicio ALLTOUR: ${voucherUrl}`
+                      : ""
+                  );
+                  const clientVoucherWhatsappUrl = createWhatsappUrl(
                     request.customer_phone,
                     voucherUrl
-                      ? `Hola ${request.passenger_name || request.customer_name}, compartimos tu voucher de servicio ALLTOUR: ${voucherUrl}`
+                      ? `Hola ${request.customer_name}, compartimos el voucher de servicio ALLTOUR para ${request.passenger_name || "el pasajero"}: ${voucherUrl}`
                       : ""
                   );
 
@@ -160,6 +166,16 @@ export default async function AdminTransportPage({
                           </div>
                           <div className="grid grid-cols-2 gap-2">
                             <label>
+                              <span className="text-xs font-semibold text-steel">Telefono PAX</span>
+                              <input className="field h-9 py-1" name="passenger_phone" defaultValue={request.passenger_phone || ""} placeholder="+593..." />
+                            </label>
+                            <label>
+                              <span className="text-xs font-semibold text-steel">Email PAX</span>
+                              <input className="field h-9 py-1" name="passenger_email" defaultValue={request.passenger_email || ""} placeholder="opcional" />
+                            </label>
+                          </div>
+                          <div className="grid grid-cols-2 gap-2">
+                            <label>
                               <span className="text-xs font-semibold text-steel">Fecha</span>
                               <input className="field h-9 py-1" name="service_date" type="date" defaultValue={request.service_date || request.scheduled_date || ""} />
                             </label>
@@ -220,9 +236,16 @@ export default async function AdminTransportPage({
                             <Link className="btn-secondary min-h-9 px-3 py-1" href={voucherPath} target="_blank">
                               <FileText size={16} /> Voucher
                             </Link>
-                            {voucherWhatsappUrl ? (
-                              <a className="btn-secondary min-h-9 px-3 py-1" href={voucherWhatsappUrl} target="_blank" rel="noreferrer">
-                                Compartir voucher
+                            {passengerVoucherWhatsappUrl ? (
+                              <a className="btn-secondary min-h-9 px-3 py-1" href={passengerVoucherWhatsappUrl} target="_blank" rel="noreferrer">
+                                Enviar voucher PAX
+                              </a>
+                            ) : (
+                              <span className="block text-xs text-steel">Agrega telefono PAX para enviar voucher directo.</span>
+                            )}
+                            {clientVoucherWhatsappUrl ? (
+                              <a className="btn-secondary min-h-9 px-3 py-1" href={clientVoucherWhatsappUrl} target="_blank" rel="noreferrer">
+                                Enviar voucher cliente
                               </a>
                             ) : null}
                           </>

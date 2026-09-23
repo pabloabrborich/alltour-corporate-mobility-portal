@@ -96,6 +96,8 @@ export type TransportRequest = {
   price_shown: string;
   price_status: string;
   passenger_name?: string | null;
+  passenger_phone?: string | null;
+  passenger_email?: string | null;
   service_date?: string | null;
   service_time?: string | null;
   assigned_vehicle?: string | null;
