@@ -316,6 +316,7 @@ export async function updateTransportRequestStatus(formData: FormData) {
   }
 
   revalidatePath("/admin/transport");
+  redirect("/admin/transport?updated=status");
 }
 
 export async function updateTransportRequestOperations(formData: FormData) {
@@ -345,6 +346,7 @@ export async function updateTransportRequestOperations(formData: FormData) {
   }
 
   revalidatePath("/admin/transport");
+  redirect("/admin/transport?updated=operation");
 }
 
 export async function updateLeadRequestStatus(formData: FormData) {

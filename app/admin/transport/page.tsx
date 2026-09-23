@@ -11,8 +11,13 @@ const statuses = ["nuevo", "contactado", "cotizado", "confirmado", "cerrado", "c
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminTransportPage() {
+export default async function AdminTransportPage({
+  searchParams
+}: {
+  searchParams: Promise<{ updated?: string }>;
+}) {
   await requireAdmin();
+  const { updated } = await searchParams;
   const requests = await getTransportRequests();
   const companies = await getCompanies();
 
@@ -41,6 +46,11 @@ export default async function AdminTransportPage() {
       </header>
 
       <section className="container-page py-8">
+        {updated ? (
+          <div className="mb-4 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-3 text-sm font-semibold text-emerald-900">
+            {updated === "operation" ? "Operacion guardada correctamente." : "Estado actualizado correctamente."}
+          </div>
+        ) : null}
         <div className="panel overflow-hidden">
           <div className="border-b border-line p-5">
             <h1 className="text-2xl font-bold">Inbox de reservas</h1>
